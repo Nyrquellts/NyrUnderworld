@@ -1,0 +1,128 @@
+{
+  "name": "a-shift-is-worked",
+  "asks": "Can somebody find out who is hiring, clock on, and be refused the wage until the work is actually done?",
+  "steps": [
+    {
+      "do": "character.release",
+      "expect": "ok",
+      "says": "Handing back whoever the account was playing. Every scenario here runs against one server and one account, in file order, so this one arrives holding the person the last one left behind -- and `character.select` refuses `already_playing` rather than quietly swapping. Releasing is not idempotent: run this scenario on its own and it stops here, saying so."
+    },
+    {
+      "do": "character.create",
+      "args": {
+        "first_name": "Ines",
+        "last_name": "Vargas"
+      },
+      "expect": "ok",
+      "save": "ines",
+      "says": "Somebody to do the work."
+    },
+    {
+      "do": "character.select",
+      "args": {
+        "character": "{ines}"
+      },
+      "expect": "ok",
+      "says": "And being her, because everything below refuses somebody who is nobody."
+    },
+    {
+      "do": "work.list",
+      "expect": "ok",
+      "check": {
+        "employers.0.hiring": true,
+        "employers.0.jobs.0.ready_in": 0,
+        "working": null
+      },
+      "says": "Who is hiring. Until this existed nothing in the city ever gave a player an employer id, so clocking on took an id that could not be got: the work was there and unreachable. `ready_in` is zero because she has never worked, and `working` is absent because she is not on a shift."
+    },
+    {
+      "do": "work.list",
+      "expect": "ok",
+      "save": "boss",
+      "save_from": "employers.0.employer",
+      "says": "The id itself, taken from the answer rather than written into this file, because it is different on every city that has ever been seeded."
+    },
+    {
+      "do": "work.list",
+      "expect": "ok",
+      "save": "shift",
+      "save_from": "employers.0.jobs.0.job",
+      "says": "And what that employer actually hires for, for the same reason: the list is ordered by id and which employer comes first is not this file's business."
+    },
+    {
+      "do": "work.start",
+      "args": {
+        "employer": "{boss}",
+        "job": "{shift}"
+      },
+      "expect": "ok",
+      "says": "Clocking on. The answer says how long the shift is, which is where a rig learns how long to wait rather than guessing -- the refusal for clocking off early carries the same number as `details`, and details do not cross the bridge to a client."
+    },
+    {
+      "do": "work.start",
+      "args": {
+        "employer": "{boss}",
+        "job": "{shift}"
+      },
+      "expect": "already_working",
+      "says": "Twice is refused. One person, one shift."
+    },
+    {
+      "do": "work.list",
+      "expect": "ok",
+      "check": {
+        "working": "{shift}"
+      },
+      "says": "And the board says what she is on, so a screen does not have to ask twice."
+    },
+    {
+      "do": "work.finish",
+      "expect": "not_done",
+      "says": "The wage is refused while the work is not done. This is the whole design: there is no payout argument anywhere in clocking off, so there is nothing a client could put a number in -- the refusal here is time, not trust."
+    },
+    {
+      "do": "me.status",
+      "expect": "ok",
+      "check": {
+        "wallet": 50000
+      },
+      "says": "Nothing has been paid. She still holds exactly what she arrived with."
+    },
+    {
+      "do": "work.abandon",
+      "expect": "ok",
+      "says": "Walking off the job is allowed."
+    },
+    {
+      "do": "work.finish",
+      "expect": "not_working",
+      "says": "And then there is no shift to clock off, which is a different refusal from the one above and says so."
+    },
+    {
+      "do": "me.status",
+      "expect": "ok",
+      "check": {
+        "wallet": 50000
+      },
+      "says": "Still nothing paid. An abandoned shift pays nothing, and the ledger is where that is true rather than a number remembered on a client."
+    },
+    {
+      "do": "work.start",
+      "args": {
+        "employer": "{boss}",
+        "job": "nothing-anybody-hires-for"
+      },
+      "expect": "no_such_job",
+      "says": "A job nobody hires for is refused by name. The client picks from what the board said; the server decides whether it was real."
+    },
+    {
+      "do": "me.nearby",
+      "expect": "ok",
+      "check": {
+        "shops.0": null,
+        "places.0": null
+      },
+      "says": "Nobody is standing anywhere, because there is no game here and no body to stand. So nothing is within reach, and that is an answer rather than an error -- which is what lets this whole file run in two seconds with no client at all."
+    }
+  ]
+}

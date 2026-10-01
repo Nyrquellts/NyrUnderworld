@@ -1,0 +1,31 @@
+{
+  "_": "What a resource checker will flag in NYR Underworld, and why it is here. Run `nyrbb fivem audit` against this resource yourself before installing it -- you should do that with every resource you install, and this one is no exception. Every family below is listed so you can find it, read it, and disagree.",
+  "resource": "nyr_underworld",
+  "accepted": {
+    "remote_execution": {
+      "why": "adapter/loader.lua calls `load` to supply `require`. A FiveM resource has one shared namespace and no module system, so the simulation -- which is ordinary Lua with no game natives in it -- is read out of this resource's own files on demand. That is also how it runs under a plain Lua interpreter in the test suite: one copy of the code, tested where it can be tested, used where it is used.",
+      "where": [
+        "adapter/loader.lua:62"
+      ],
+      "what_would_be_wrong": "A `load` that ran anything fetched over the network, or anything a client sent. This one takes a module name, validates it segment by segment against `^[%a_][%w_]*$`, refuses `..`, and reads only from inside this resource.",
+      "how_to_check": "Read adapter/loader.lua. It is under a hundred lines and the whole path from name to file is in front of you."
+    },
+    "self_modifying": {
+      "why": "adapter/resource_store.lua calls `SaveResourceFile`, which is how a FiveM resource writes anything at all. The city is saved with it: people, property, shops, the ledger. Without it nothing survives a restart.",
+      "where": [
+        "adapter/resource_store.lua:195",
+        "adapter/resource_store.lua:200"
+      ],
+      "what_would_be_wrong": "Writing a `.lua` file, or writing anything outside `data/`. This writes JSON into `data/` only, keeps a backup of the previous content, and never writes code.",
+      "how_to_check": "Every call names a file under data/. Nothing in this resource writes a script, and nothing loads a script from data/."
+    },
+    "privilege_escalation": {
+      "why": "adapter/devclient.lua calls `ExecuteCommand` so that a development bridge can press this resource's own buttons -- open a screen, run a chat command -- without a person at the keyboard. It exists because the alternative is asking somebody to type a command and believing the answer, which is not evidence: on a server with no chat resource there is nowhere to type and nowhere for the reply to go, and 'it works' and 'nothing happened' look identical from both ends.",
+      "where": [
+        "adapter/devclient.lua:161"
+      ],
+      "what_would_be_wrong": "Running whatever string arrived. Three things stop that. The half that calls it is inert until a LAN server sends `nyr:dev:on`, and `DevBridge.install` returns without sending anything when `sv_lan` is not true, so on a public server this line is never reached. The name is checked on the server by `DevBridge.act_plan` against `Commands.claimed()` -- the sixty-nine names this resource registers -- so `quit`, `restart` and every other console command are refused. And no arguments are passed, so a command that needs them is refused by its own parsing.",
+      "how_to_check": "Read `DevBridge.act_plan` in adapter/devbridge.lua and the `run` tests in spec/devbridge_spec.lua, which show it refusing `quit`, `restart`, `load_server_icon` and an unregistered name. Then check `sv_lan` on your own server: with it off, `[nyr] dev bridge off: this server is not in LAN mode` is printed at boot and none of this installs."
+    }
+  }
+}

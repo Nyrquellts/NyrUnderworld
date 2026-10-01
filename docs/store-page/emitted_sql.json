@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "execute",
+    "params": {
+      
+    },
+    "sql": "CREATE TABLE IF NOT EXISTS `nyr_store` (\n  `collection` VARCHAR(48)  NOT NULL,\n  `store_key`  VARCHAR(190) NOT NULL COLLATE utf8mb4_bin,\n  `payload`    LONGTEXT     NOT NULL,\n  `updated_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`collection`, `store_key`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+  },
+  {
+    "kind": "query",
+    "params": [
+      "world"
+    ],
+    "sql": "SELECT `store_key`, `payload` FROM `nyr_store` WHERE `collection` = ?"
+  },
+  {
+    "kind": "query",
+    "params": [
+      "chr"
+    ],
+    "sql": "SELECT `store_key`, `payload` FROM `nyr_store` WHERE `collection` = ?"
+  },
+  {
+    "kind": "execute",
+    "params": [
+      "chr",
+      "chr_0001",
+      "{\"name\":\"Vic Ortega\",\"slots\":30,\"wallet\":218050}",
+      "chr",
+      "chr_0002",
+      "{\"name\":\"Rosa Lindqvist\",\"wallet\":81220}"
+    ],
+    "sql": "INSERT INTO `nyr_store` (`collection`, `store_key`, `payload`) VALUES (?, ?, ?), (?, ?, ?) ON DUPLICATE KEY UPDATE `payload` = VALUES(`payload`)"
+  },
+  {
+    "kind": "execute",
+    "params": [
+      "world",
+      "clock",
+      "{\"day\":7,\"ms\":61860000}"
+    ],
+    "sql": "INSERT INTO `nyr_store` (`collection`, `store_key`, `payload`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `payload` = VALUES(`payload`)"
+  },
+  {
+    "kind": "execute",
+    "params": [
+      "chr",
+      "chr_0002"
+    ],
+    "sql": "DELETE FROM `nyr_store` WHERE `collection` = ? AND `store_key` IN (?)"
+  },
+  {
+    "kind": "execute",
+    "params": [
+      "chr",
+      "chr_0001",
+      "{\"name\":\"Vic Ortega\",\"slots\":30,\"wallet\":168050}"
+    ],
+    "sql": "INSERT INTO `nyr_store` (`collection`, `store_key`, `payload`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `payload` = VALUES(`payload`)"
+  },
+  {
+    "kind": "query",
+    "params": {
+      
+    },
+    "sql": "SELECT DISTINCT `collection` FROM `nyr_store`"
+  }
+]

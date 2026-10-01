@@ -1,0 +1,233 @@
+{
+  "$comment": "The offer as data, so it can be read without parsing a web page. Every number here is measured, not estimated; `evidence` says how. Updated 2026-09-13 for 0.1.0-rc.6, after a connected play-through and the recorded demonstration.",
+  "schema": "nyr.underworld.offer/v1",
+  "product": {
+    "name": "NYR Underworld",
+    "tagline": "The city remembers.",
+    "kind": "FiveM server resource",
+    "category": "standalone city / life / crime roleplay framework",
+    "version": "0.1.0-rc.6",
+    "source_commit": "12a7fdc",
+    "source_branch": "master",
+    "$commit_note": "Names the last commit that changed the files a buyer installs, on master. Documentation and spec commits after it do not move the product."
+  },
+  "price": {
+    "amount": 49,
+    "currency": "USD",
+    "model": "one-time",
+    "recurring": false,
+    "subscription": false,
+    "display": "$49 USD",
+    "status": "chosen by the seller on 2026-09-13; not yet live for sale",
+    "basis": "Chosen by the seller from $49, $59 and $79 on 2026-09-13, for easier first sales as a new seller with no reviews. The comparables and fee model below are unchanged."
+  },
+  "pricing_analysis": {
+    "comparables_observed_2026_09_11": [
+      {
+        "product": "Wasabi Multicharacter",
+        "price_usd": 39.99,
+        "note": "includes QB/ESX/QBOX bridges"
+      },
+      {
+        "product": "Wasabi Advanced Police Job (unlocked)",
+        "price_usd": 124.99,
+        "note": "props, radar, CCTV, garage, integrations"
+      },
+      {
+        "product": "Resolve Jobs Creator",
+        "price_gbp": 8.0,
+        "note": "ESX job/rank/salary editor"
+      },
+      {
+        "product": "Numen Delivery Jobs",
+        "price_pln": 79.95,
+        "note": "delivery progression, framework support"
+      }
+    ],
+    "fee_model": {
+      "platform_fee": "15% (Tebex FiveM)",
+      "payment_fee": "2.49% + $0.40 (published PayPal example)",
+      "net_formula": "price * 0.8251 - 0.40"
+    },
+    "net_per_order_usd": 40.03,
+    "orders_to_clear_300_usd": 8,
+    "alternatives_considered": [
+      {
+        "price_usd": 59,
+        "net_per_order_usd": 48.28,
+        "orders_to_clear_300": 7,
+        "note": "the previous proposal"
+      },
+      {
+        "price_usd": 79,
+        "net_per_order_usd": 64.78,
+        "orders_to_clear_300": 5
+      },
+      {
+        "price_usd": 120,
+        "net_per_order_usd": 98.61,
+        "orders_to_clear_300": 4,
+        "note": "not justified by current evidence; no framework bridges and four systems are chat commands"
+      }
+    ],
+    "cash_timing_warning": "Tebex default settlement is about 14 days, PayPal withdrawal 1-2 working days, and a new payout method carries a five-day hold. A sale is not same-week cash.",
+    "before_selling": "Tebex project review must approve a new project before it accepts payments. Test Mode can validate delivery while approval is pending."
+  },
+  "contents": {
+    "systems": 15,
+    "commands": 68,
+    "interface_screens": 8,
+    "interface_screen_names": [
+      "characters",
+      "pockets",
+      "phone",
+      "shop counter",
+      "property stash",
+      "around you",
+      "bank counter",
+      "job board"
+    ],
+    "lua_files_shipped": 54,
+    "total_files_shipped": 61,
+    "automated_tests": 980,
+    "runtime_dependencies": 0,
+    "interface_note": "Eight things have screens, reached from map blips, a ground marker and a press-E prompt at a shop, a bank branch or a door for sale, and keys F2 to F6. Gangs, police, fencing and vehicles are documented chat commands."
+  },
+  "requirements": {
+    "fivem_server": true,
+    "server_licence_key": "required by both FiveM server builds, even on loopback",
+    "onesync": "required; declared in the manifest so the server enforces it",
+    "game_builds": [
+      "gta5",
+      "gta5enhanced"
+    ],
+    "database": "optional",
+    "database_drivers_supported": [
+      "oxmysql",
+      "mysql-async"
+    ],
+    "database_library_shipped": false
+  },
+  "compatibility": {
+    "fresh_server": "yes, the intended case",
+    "esx": "no bridge included or verified",
+    "qbcore": "no bridge included or verified",
+    "qbox": "no bridge included or verified",
+    "streamed_asset_packs": "yes; maps, vehicles and clothing do not touch gameplay rules",
+    "txadmin": "yes, it is an ordinary resource",
+    "positioning": "This replaces a framework rather than sitting on one. It is for a new or rebuilt server, not for adding to an existing ESX or QBCore server."
+  },
+  "licence": {
+    "scope": "the servers the purchaser administers",
+    "modify_source": true,
+    "player_cap": null,
+    "uptime_cap": null,
+    "revenue_cap": null,
+    "redistribute_or_resell": false,
+    "obfuscation": false,
+    "escrow": false,
+    "phone_home": false,
+    "basis": "Aligned with the Cfx Platform Licence Agreement (12 Jan 2026) sections 6.3-6.4, which license Marketplace Content for the servers the purchaser administers. An earlier one-server wording contradicted that and was corrected."
+  },
+  "included": [
+    "readable Lua source, 54 files",
+    "eight interface screens, with map blips, ground markers and press-E prompts",
+    "config.lua, validated before the server will start",
+    "MySQL persistence layer (driver not included; it uses the one you run)",
+    "LICENSE",
+    "audit-accepted.json, naming what a resource checker flags and why"
+  ],
+  "not_included": [
+    "hosting",
+    "a GTA V copy",
+    "custom maps, vehicles, clothing or streamed audio",
+    "ESX / QBCore / QBOX bridges",
+    "an EMS role, dispatch or hospital",
+    "licences and courts (a sentence is a fine)",
+    "a drag-and-drop inventory",
+    "a graphical HUD (/nyrhud shows a one-line text status; anything more is drawn from me.status)"
+  ],
+  "support": {
+    "channel": null,
+    "channel_status": "must be a monitored channel before checkout opens",
+    "first_response_target_hours": 72,
+    "covers": "installation and defects in the documented configuration",
+    "excludes": "custom integration, which is a separate scope",
+    "basis": "Tebex Creator Agreement section 4 requires monitored contact and a 72-hour response."
+  },
+  "evidence": {
+    "tests": "980 pass in a few seconds with no game and no server; the rules are plain Lua that knows nothing about FiveM",
+    "release_gate": "manifest, licence file, credential scan, static check and backdoor audit, then the staged copy is booted on a real FXServer and its own playtest is run against that staged copy",
+    "gate_result": "SHIPPABLE on the staged copy of 12a7fdc on both server builds, legacy FXServer and enhanced cfx-server (--seconds 60); boot and playtest both pass",
+    "proved": [
+      "static analysis",
+      "a real server boot of the staged folder, on both server builds",
+      "a scripted playtest through the resource's own command bus",
+      "a connected FiveM client on the enhanced server walked both player journeys with every check made and passed: the client drew a map mark for each place, the press-E prompt at a shop and at a bank branch, and F5 and F6 brought up their screens (663579b)",
+      "a joining player's body stays on the ground: it fell through the map on all three joins before a9fd79c, and after it the lowest point over 45 seconds was the ground",
+      "the status line no longer covers the press-E prompt: before a6348ee the two were drawn in the same corner; after it, a connected client shows the prompt at a shop and a bank alone in its corner and the line at top centre",
+      "an amount typed at the bank is dollars: 200 typed paid in $2.00 before b6997f4, found by a person at the bank on a connected client; it is converted to whole cents in tested code, and the bank screen in the recorded film shows $200.00 paid in",
+      "on the enhanced server, a resource folder that cannot be written refuses to start rather than lose the city",
+      "an unlimited starting-money loop (create, bank, transfer, retire) closed: reproduced before the fix, capped after"
+    ],
+    "not_proved": [
+      "E pressed at a marker, and the buttons on a screen (Buy, Take it, Pay in), driven by a journey; the commands behind them are proven, the presses are not",
+      "the journeys on a9fd79c itself: they were walked on 663579b, one commit before the spawn fix, which changes nothing they check",
+      "many concurrent players on one server",
+      "a sustained period against a production MySQL",
+      "the merged database store against a real MariaDB or MySQL; the transport check below predates it",
+      "anything a native decides that no journey reads back, beyond the marks, prompts, screens and positions above"
+    ],
+    "live_database": {
+      "server": "MariaDB 12.3.3 on loopback",
+      "method": "the statements the store actually emits, captured from a real run, replayed with server-side parameter binding (PREPARE / EXECUTE ... USING)",
+      "statements_replayed": 8,
+      "verified": {
+        "schema_valid": "the CREATE TABLE is accepted as written",
+        "on_duplicate_key_update": "VALUES(payload) works on MariaDB; the MySQL-8-only row-alias form was deliberately avoided and that choice is now confirmed",
+        "key_case_sensitivity": "utf8mb4_bin confirmed by the server; 'Bob' and 'bob' are two rows, not one",
+        "key_length_limit": "a 191-character key is refused by the server outright, not truncated",
+        "integers_round_trip": "218050 cents comes back as the integer 218050"
+      },
+      "transport": {
+        "status": "verified",
+        "what": "oxmysql 2.14.1 carrying this store's own statements inside a running FXServer",
+        "stack": "cfx-server build 139, oxmysql 2.14.1 built from source, MariaDB 12.3.3 on loopback",
+        "method": "the resource booted with `set nyr_store database`; a character was created through its own command bus; the write-behind flush was observed landing in MariaDB by querying MariaDB directly, not by trusting the resource's log",
+        "round_trip": "the server was stopped, the JSON `data` directory deleted outright so nothing could load from a file, and the server restarted: the city came back as `1 people` and `character.list` returned the character by name and wallet",
+        "return_shapes_measured": "oxmysql's untyped path returns mysql2's raw result header (a table), not a number; a failing statement throws rather than returning nil. The driver already normalised both, and `spec/sql_driver_spec.lua` now holds those measured shapes so a later tidy cannot quietly break the contract the store documents."
+      },
+      "build": "measured on master before the 2026-09-13 merge; the database store changed in that merge and has not been re-run against MariaDB since"
+    },
+    "recorded_session": {
+      "what": "a 73-second film driven by the rig with a real FiveM client connected to a real enhanced server: a character is made, runs to Pillbox Hill Branch by the game's route finding, opens an account and pays in $200, takes a shift from the job board, walks into Rob's Liquor, presses E at the counter, buys a bottle of water and opens their pockets",
+      "output": "run/video/nyr-underworld-demo-short.mp4, 1920x1080, 30 fps, no audio, not in the repository",
+      "method": "docs/store-page/film.py and film_walkin.py: the screen recorded through dxcam and ffmpeg while the dev bridge walks the body (TaskFollowNavMeshToCoord), presses E through the function the key calls, runs each button's command through the command bus, and redraws the screen from the server's answer",
+      "checked": "every second of both source clips looked at on a contact sheet: no window but the game, no overlay",
+      "cut": "a delivery truck knocking the body down mid-run, the walk that stuck at a wall outside the shop, and a take that caught a person's Alt-Tab window list are not in it",
+      "not_shown": "a person's own key presses and clicks: E and the buttons are driven through the same functions, not by a keyboard",
+      "build": "recorded on c475fac plus the filming scripts (12a7fdc is the same resource files)"
+    }
+  },
+  "sale_readiness": {
+    "cleared_for_sale": false,
+    "outstanding": [
+      "Tebex project review and approval",
+      "verified checkout and delivery in Test Mode"
+    ],
+    "cleared": {
+      "seller legal name, jurisdiction and business contact": "supplied; docs/fill_seller.py renders the legal drafts with all thirteen placeholders closed and exits zero. The values are in a gitignored local file and are not in this repository, this record, or any published artifact",
+      "a monitored support channel": "supplied in the same local file; SUPPORT CHANNEL and MONITORED EMAIL are both filled"
+    },
+    "still_false_because": "cleared_for_sale stays false while anything is outstanding. Both remaining items are Tebex's and the seller's. The connected play-through and the demonstration on 0.1.0-rc.6 were completed on 2026-09-13."
+  },
+  "legal_notice": "NYR Underworld is an independent FiveM resource. It is not affiliated with, approved, sponsored or endorsed by Rockstar Games, Cfx.re or Take-Two Interactive. GTA V and FiveM are the property of their respective owners.",
+  "assets": {
+    "key_art": "docs/store/assets/underworld-key-art.png (promotional illustration, not gameplay)",
+    "thumbnails": [
+      "1080x1080",
+      "1280x720"
+    ],
+    "interface_screens": "rendered from the resource's own markup and stylesheet, with data built by the real systems in docs/store-page/make_views.lua; not in-game footage"
+  }
+}

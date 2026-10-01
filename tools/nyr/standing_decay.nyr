@@ -1,0 +1,26 @@
+# How standing drifts back toward where it rests (domain/standing.lua, settle).
+# nyrc compiles this file (nyr.json) into domain/rules/standing_decay.lua; never edit that file.
+#
+# Scores are integers and decay is exact: it moves in whole periods from the last time it was
+# worked out, so ten questions in one hour and one question after ten hours give the same answer.
+# Every input is a whole number (city milliseconds and points, well below 2^53, where these sums and
+# floor(a / b) are exact), and so is every result; the host turns them back into Lua integers.
+#
+# Inputs   score        the standing now
+#          rest         where it drifts to (the entry's floor)
+#          decayed_at   when decay was last worked out
+#          now          the city clock
+#          period       city milliseconds per step (above 0)
+#          rate         points toward rest per step (0: this party's standing never drifts)
+# Outputs  score, decayed_at
+
+# Already at rest: nothing to drift, and the clock moves on with it.
+[score == rest] => decayed_at <- now
+
+# Whole periods since the last step each move the score rate points toward rest, never past it.
+[score > rest] and [rate != 0] and [now - decayed_at >= period]
+    => decayed_at <- decayed_at + floor((now - decayed_at) / period) * period,
+       score <- max(rest, score - floor((now - decayed_at) / period) * rate)
+[score < rest] and [rate != 0] and [now - decayed_at >= period]
+    => decayed_at <- decayed_at + floor((now - decayed_at) / period) * period,
+       score <- min(rest, score + floor((now - decayed_at) / period) * rate)

@@ -1,0 +1,26 @@
+# What this resource holds back from a release. One pattern per line, matched
+# against the whole path; `*` matches anything.
+#
+# Everything at the top of the repository that a server does not load and a
+# buyer does not read is named here, so this file alone says what ships.
+# spec/shipping_spec.lua fails for a top-level file that is neither shipped on
+# purpose nor named below.
+STATUS.md
+.gitignore
+.nyrignore
+# In a git worktree .git is a file pointing at the repository, not a directory.
+.git
+# NYR-Lang's list of rule sources (tools/nyr/*.nyr) and the modules nyrc builds from them; the
+# modules ship, the list is for nyrc.
+nyr.json
+
+# Server state and local operator configuration never belong in a buyer zip.
+data/*.json
+data/*.json.*
+*.cfg
+*.cfg.local
+.env
+.env.*
+*.key
+*.pem
+*.pfx

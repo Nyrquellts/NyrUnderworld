@@ -1,0 +1,392 @@
+{
+  "bank": {
+    "balance": "$390.00",
+    "empty": false,
+    "frozen": false,
+    "lines": [
+      {
+        "amount": "$450.00",
+        "incoming": true,
+        "reason": "deposit",
+        "sequence": 9
+      },
+      {
+        "amount": "-$60.00",
+        "incoming": false,
+        "reason": "withdrawal",
+        "sequence": 10
+      }
+    ],
+    "number": "NYR-EEEF-A6GE",
+    "open": true,
+    "state": "open"
+  },
+  "bank_branch": "prp_00019idhc0006w96aqa",
+  "inbox": {
+    "empty": false,
+    "number": "555-944888",
+    "threads": [
+      {
+        "last": "dont bring the car",
+        "number": "555-624699",
+        "outgoing": false,
+        "when": "day 1, 03:14"
+      }
+    ]
+  },
+  "jobs": {
+    "employers": [
+      {
+        "employer": "emp_00019idhc0000chl7af",
+        "hiring": true,
+        "jobs": [
+          {
+            "job": "delivery",
+            "label": "Delivery Driver",
+            "minutes": 12,
+            "pay": "$120.00",
+            "ready_in": 0
+          }
+        ],
+        "name": "Postal OP"
+      },
+      {
+        "employer": "emp_00019idhc00019a5abb",
+        "hiring": true,
+        "jobs": [
+          {
+            "job": "refuse",
+            "label": "Refuse Collection",
+            "minutes": 15,
+            "pay": "$90.00",
+            "ready_in": 0
+          }
+        ],
+        "name": "Sanitation LS"
+      }
+    ],
+    "empty": false
+  },
+  "nearby": {
+    "empty": false,
+    "places": [
+      {
+        "address": "Integrity Way, Apt 28",
+        "enterable": true,
+        "for_sale": false,
+        "kind": "apartment",
+        "may_enter": true,
+        "mine": true,
+        "offers": [
+          "enter"
+        ],
+        "place": "prp_00019idhc000211zg6o"
+      },
+      {
+        "address": "Alta Street, Apt 57",
+        "enterable": true,
+        "for_sale": true,
+        "kind": "apartment",
+        "may_enter": false,
+        "mine": false,
+        "offers": [
+          "purchase",
+          "enter"
+        ],
+        "place": "prp_00019idhc00032dfg4c",
+        "price": "$3,200.00"
+      },
+      {
+        "address": "Rob's Liquor, Grove Street",
+        "enterable": false,
+        "for_sale": false,
+        "kind": "shop",
+        "may_enter": false,
+        "mine": false,
+        "offers": {
+          
+        },
+        "place": "prp_00019idhc0004rpawbv"
+      },
+      {
+        "address": "Cypress Flats Scrapyard",
+        "enterable": false,
+        "for_sale": false,
+        "kind": "shop",
+        "may_enter": false,
+        "mine": false,
+        "offers": {
+          
+        },
+        "place": "prp_00019idhc00056cv3cd"
+      },
+      {
+        "address": "Pillbox Hill Branch",
+        "enterable": false,
+        "for_sale": false,
+        "kind": "bank",
+        "may_enter": false,
+        "mine": false,
+        "offers": {
+          
+        },
+        "place": "prp_00019idhc0006w96aqa"
+      },
+      {
+        "address": "Legion Square Branch",
+        "enterable": false,
+        "for_sale": false,
+        "kind": "bank",
+        "may_enter": false,
+        "mine": false,
+        "offers": {
+          
+        },
+        "place": "prp_00019idhc0007g88ekd"
+      }
+    ],
+    "shops": [
+      {
+        "name": "Rob's Liquor",
+        "offers": [
+          "shop"
+        ],
+        "shop": "shp_00019idhc0008p4i8nc",
+        "shut": false
+      }
+    ]
+  },
+  "picker": {
+    "empty": false,
+    "limit": 3,
+    "people": [
+      {
+        "character": "chr_00019idhc000cdydcr1",
+        "money": "$2,180.50",
+        "name": "Vic Ortega",
+        "playing": true,
+        "state": "active"
+      },
+      {
+        "character": "chr_00019idhc000ej60z9n",
+        "money": "$812.20",
+        "name": "Rosa Lindqvist",
+        "playing": false,
+        "state": "offline"
+      }
+    ],
+    "used": 2
+  },
+  "pockets": {
+    "capacity": "40kg",
+    "empty": false,
+    "full": 64,
+    "items": [
+      {
+        "count": 1,
+        "instance": "itm_00019idhc000dsjk3xl",
+        "item": "phone",
+        "label": "Phone"
+      },
+      {
+        "count": 4,
+        "item": "water",
+        "label": "Bottle of Water",
+        "stack": "4"
+      },
+      {
+        "count": 2,
+        "item": "burger",
+        "label": "Burger",
+        "stack": "2"
+      },
+      {
+        "count": 3,
+        "item": "bandage",
+        "label": "Bandage",
+        "stack": "3"
+      },
+      {
+        "count": 2,
+        "item": "lockpick",
+        "label": "Lockpick",
+        "stack": "2"
+      },
+      {
+        "count": 11,
+        "item": "scrap",
+        "label": "Scrap Metal",
+        "stack": "11"
+      },
+      {
+        "count": 2,
+        "item": "watch",
+        "label": "Gold Watch",
+        "stack": "2"
+      }
+    ],
+    "slots": 30,
+    "slots_used": 7,
+    "weight": "25.7kg"
+  },
+  "shop": {
+    "empty": false,
+    "lines": [
+      {
+        "bare": false,
+        "buy": "$12.00",
+        "item": "bandage",
+        "label": "Bandage",
+        "sell": "$4.00",
+        "stock": 25
+      },
+      {
+        "bare": false,
+        "buy": "$4.00",
+        "item": "burger",
+        "label": "Burger",
+        "sell": "$1.50",
+        "stock": 40
+      },
+      {
+        "bare": true,
+        "item": "scrap",
+        "label": "Scrap Metal",
+        "sell": "$9.00",
+        "stock": 0
+      },
+      {
+        "bare": false,
+        "buy": "$2.50",
+        "item": "water",
+        "label": "Bottle of Water",
+        "sell": "$1.00",
+        "stock": 60
+      }
+    ],
+    "name": "Rob's Liquor",
+    "shut": false,
+    "state": "open"
+  },
+  "stash": {
+    "address": "Integrity Way, Apt 28",
+    "here": {
+      "capacity": "40kg",
+      "empty": false,
+      "full": 64,
+      "items": [
+        {
+          "count": 1,
+          "instance": "itm_00019idhc000dsjk3xl",
+          "item": "phone",
+          "label": "Phone"
+        },
+        {
+          "count": 4,
+          "item": "water",
+          "label": "Bottle of Water",
+          "stack": "4"
+        },
+        {
+          "count": 2,
+          "item": "burger",
+          "label": "Burger",
+          "stack": "2"
+        },
+        {
+          "count": 3,
+          "item": "bandage",
+          "label": "Bandage",
+          "stack": "3"
+        },
+        {
+          "count": 2,
+          "item": "lockpick",
+          "label": "Lockpick",
+          "stack": "2"
+        },
+        {
+          "count": 11,
+          "item": "scrap",
+          "label": "Scrap Metal",
+          "stack": "11"
+        },
+        {
+          "count": 2,
+          "item": "watch",
+          "label": "Gold Watch",
+          "stack": "2"
+        }
+      ],
+      "slots": 30,
+      "slots_used": 7,
+      "weight": "25.7kg"
+    },
+    "pockets_id": "chr_00019idhc000cdydcr1",
+    "stash_id": "prp:prp_00019idhc000211zg6o",
+    "there": {
+      "capacity": "200kg",
+      "empty": false,
+      "full": 10,
+      "items": [
+        {
+          "count": 9,
+          "item": "scrap",
+          "label": "Scrap Metal",
+          "stack": "9"
+        },
+        {
+          "count": 6,
+          "item": "water",
+          "label": "Bottle of Water",
+          "stack": "6"
+        },
+        {
+          "count": 1,
+          "item": "watch",
+          "label": "Gold Watch"
+        }
+      ],
+      "slots": 40,
+      "slots_used": 3,
+      "weight": "21.2kg"
+    }
+  },
+  "thread": {
+    "empty": false,
+    "messages": [
+      {
+        "body": "you still holding the watches",
+        "mine": false,
+        "sequence": 1,
+        "when": "day 0, 21:14"
+      },
+      {
+        "body": "two. nobody's is paying 40 each",
+        "mine": true,
+        "sequence": 2,
+        "when": "day 0, 22:44"
+      },
+      {
+        "body": "cypress flats. after the shift ends",
+        "mine": false,
+        "sequence": 3,
+        "when": "day 1, 00:14"
+      },
+      {
+        "body": "ill be there",
+        "mine": true,
+        "sequence": 4,
+        "when": "day 1, 01:44"
+      },
+      {
+        "body": "dont bring the car",
+        "mine": false,
+        "sequence": 5,
+        "when": "day 1, 03:14"
+      }
+    ],
+    "number": "555-944888",
+    "with": "555-624699"
+  }
+}

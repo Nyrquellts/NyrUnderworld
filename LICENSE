@@ -1,0 +1,79 @@
+NYR UNDERWORLD — LICENCE
+Copyright (c) 2026 Nyr. All rights reserved.
+
+This is commercial software. It is not open source, and it is not free to
+redistribute. Buying it buys you the right to run it, described below.
+
+WHAT YOU MAY DO
+
+1. Run it. A one-time purchase grants you a non-exclusive licence to install
+   and run this resource on one or more FiveM servers you administer, using
+   the corresponding platform keys. There is no additional per-player or
+   per-server fee from Nyr. Use remains subject to applicable platform terms.
+
+2. Change it. You may modify the code for your own server: rename things,
+   rebalance them, add to them, translate them, and wire them to other
+   resources you run. You do not need permission and you do not owe anyone the
+   changes.
+
+3. Keep it. You may keep backups and copies for your own use, and you may keep
+   running a version you bought after support for it ends.
+
+4. Have somebody work on it for you. A developer you hire may hold a copy while
+   they work on your server and must delete it when the work is done.
+
+WHAT YOU MAY NOT DO
+
+5. Redistribute it. Except for the developer access in clause 4, you may not
+   sell, give away, publish, leak, mirror, bundle
+   or share this resource or any part of it, modified or not. That includes
+   uploading it anywhere others can download it, and includes sharing it with
+   another server owner who has not bought it.
+
+6. Re-license it. You may not present this work, or anything derived from it,
+   as your own to sell or to give away.
+
+7. Strip the attribution. You may not remove or alter the copyright notice,
+   this licence file, or the author credit in fxmanifest.lua.
+
+8. Transfer it to another operator. This purchase does not grant unrelated
+   server operators a licence. Servers you administer are covered by clause 1.
+
+SOURCE
+
+It ships as readable Lua on purpose. There is no obfuscation, no escrow and no
+phone-home. You can read every rule that governs your server, and you should:
+`audit-accepted.json` lists what a resource checker will flag and why, and
+README.md explains the design. Nothing in this resource contacts any server but
+your own.
+
+NO WARRANTY
+
+9. To the extent permitted by law, this software is provided "as is", without
+   warranty of any kind, express or
+   implied, including but not limited to the warranties of merchantability,
+   fitness for a particular purpose and non-infringement. You run it on your
+   own server at your own risk, and you are responsible for your own backups.
+
+10. To the extent permitted by law, the author shall not be liable for any claim, damages or other
+    liability, whether in an action of contract, tort or otherwise, arising
+    from, out of or in connection with this software or its use.
+
+MANDATORY RIGHTS AND PLATFORM TERMS
+
+11. Nothing here excludes mandatory consumer rights, remedies or liabilities
+    that cannot lawfully be excluded. For qualifying Cfx Marketplace Content,
+    the one-time use licence is irrevocable subject to the rights reserved by
+    Rockstar under the applicable platform agreement. Nyr may pursue lawful
+    remedies for unauthorised redistribution; this clause does not create a
+    discretionary power to revoke a paid use licence. Mandatory platform
+    licence rights and law take precedence over conflicting provisions here.
+
+NOT AFFILIATED
+
+12. This is an independent work. It is not affiliated with, endorsed by or
+    connected to Cfx.re, Rockstar Games or Take-Two Interactive. "FiveM" and
+    "Grand Theft Auto" belong to their respective owners, and you are
+    responsible for complying with their terms on your own server.
+
+Questions about what this permits: ask before assuming.

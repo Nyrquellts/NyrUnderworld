@@ -1,0 +1,98 @@
+{
+  "name": "work-and-bank",
+  "capability": "jobs and banking",
+  "asks": "Can a player find work and a bank, take a shift and reach an account, without typing a command?",
+  "steps": [
+    {
+      "check": "action",
+      "do": "character.release",
+      "expect": "any",
+      "says": "Start from nobody. Whether this answers ok or not_playing depends only on which journey ran before it, so the step asks for neither: it is putting the city into a known state, not asserting one."
+    },
+    {
+      "check": "action",
+      "do": "character.create",
+      "args": {
+        "first_name": "Tomas",
+        "last_name": "Iversen"
+      },
+      "expect": "ok",
+      "save": "tomas",
+      "says": "Somebody to work and to bank."
+    },
+    {
+      "check": "action",
+      "do": "character.select",
+      "args": {
+        "character": "{tomas}"
+      },
+      "expect": "ok",
+      "says": "And being them."
+    },
+    {
+      "check": "discovery",
+      "by": "work.list",
+      "in": "employers",
+      "naming": "employer",
+      "save": "boss",
+      "says": "Who is hiring. Work has no location -- an employer is external and there is nowhere to stand -- so the board is the whole of discovery, and it is why the job screen is on a key rather than a door."
+    },
+    {
+      "check": "presentation",
+      "screen": "jobs",
+      "says": "The job board, opened the way F6 opens it. A screen the server can be asked to open is a screen a player can reach."
+    },
+    {
+      "check": "presentation",
+      "screen": "jobs",
+      "by": "nyrboard",
+      "says": "And the key itself (F6), pressed rather than the function behind it, and read back: the board has to be what comes up. A press that merely arrived is not a board a player can see."
+    },
+    {
+      "check": "action",
+      "do": "work.list",
+      "expect": "ok",
+      "says": "What the board holds, which is what the screen draws."
+    },
+    {
+      "check": "feedback",
+      "value": "employers.0.jobs.0.pay",
+      "says": "A wage a player can read before taking the shift, not after."
+    },
+    {
+      "check": "discovery",
+      "by": "me.map",
+      "in": "places",
+      "naming": "place",
+      "says": "And the bank, which does have a location. Every place a player can use is on the map, so a branch can be found rather than stumbled upon."
+    },
+    {
+      "check": "discovery",
+      "client": "marked",
+      "says": "And the marks the client actually drew. The server listing a branch when asked is not a branch on anybody's map."
+    },
+    {
+      "check": "reachability",
+      "at": [
+        149.0,
+        -1040.0,
+        30.0,
+        160.0
+      ],
+      "confirm": "me.nearby",
+      "in": "places",
+      "says": "Pillbox Hill Branch, from config.lua. Unlike an employer a branch has an address, so there is somewhere to stand, and the server is asked whether it agrees the body is there."
+    },
+    {
+      "check": "presentation",
+      "client": "prompt",
+      "says": "The press-E prompt at the branch. A bank had a blip and deliberately no prompt for as long as there was no bank screen for the key to open. There is one now, so a branch with no prompt is a screen nobody can reach."
+    },
+    {
+      "check": "state",
+      "read": "me.status",
+      "fields": {},
+      "says": "The city still knows who this is after all of that."
+    }
+  ]
+}

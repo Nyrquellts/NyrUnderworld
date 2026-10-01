@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NYR Underworld</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Original NYR item pictograms, shared by pockets, stashes, counters and the
+     empty states of every screen. -->
+<svg xmlns="http://www.w3.org/2000/svg" class="icon-definitions" aria-hidden="true">
+  <defs>
+    <symbol id="item-water" viewBox="0 0 64 64"><path d="M25 8h14v7H25zM26 15v8l-7 9v21q0 4 4 4h18q4 0 4-4V32l-7-9v-8M19 35h26M19 48h26M29 39h6"/></symbol>
+    <symbol id="item-burger" viewBox="0 0 64 64"><path d="M10 29c1-12 10-19 22-19s21 7 22 19H10zM12 39h40M10 48h44l-3 7H13zM10 33l9 5 10-5 10 5 15-5M10 43h44M24 18l1 2M35 17l1 2M43 22l1 2"/></symbol>
+    <symbol id="item-bandage" viewBox="0 0 64 64"><path d="M10 38L38 10q6-6 12 0l4 4q6 6 0 12L26 54q-6 6-12 0l-4-4q-6-6 0-12zM21 29l14 14M29 21l14 14M15 42l1-1M21 48l1-1M43 16l1-1M49 22l1-1"/></symbol>
+    <symbol id="item-phone" viewBox="0 0 64 64"><rect x="17" y="6" width="30" height="52" rx="5"/><path d="M18 46h28M26 12h12M29 52h6"/><path d="M24 23h16M24 29h10"/></symbol>
+    <symbol id="item-lockpick" viewBox="0 0 64 64"><path d="M12 51l27-29 11 1 6-7M8 48l7 7M22 10l24 37M18 12l7-5M43 45l9 10 5-4-9-10"/></symbol>
+    <symbol id="item-scrap" viewBox="0 0 64 64"><path d="M10 20l29-9 6 17-29 9zM17 23l23-7M13 44l37-11 5 17-37 11zM22 46l28-8M17 20l4 13M41 39l4 14"/></symbol>
+    <symbol id="item-watch" viewBox="0 0 64 64"><circle cx="32" cy="32" r="15"/><path d="M23 19l2-13h14l2 13M23 45l2 13h14l2-13M32 22v10l7 4M47 28h4v8h-4M29 10h6M29 54h6"/></symbol>
+    <symbol id="item-passport" viewBox="0 0 64 64"><rect x="13" y="8" width="38" height="49" rx="3"/><path d="M20 8v49M26 16h17M26 48h17"/><circle cx="34" cy="32" r="9"/><path d="M25 32h18M34 23c-5 5-5 13 0 18M34 23c5 5 5 13 0 18"/></symbol>
+    <symbol id="item-package" viewBox="0 0 64 64"><path d="M9 19l23-10 23 10v28L32 57 9 47V19zM9 19l23 11 23-11M32 30v27M21 14l23 11v12"/></symbol>
+  </defs>
+</svg>
+
+<!--
+  How the screens are laid out, and why.
+
+  Every screen used to cover the whole game with a near-black sheet, so opening
+  the pockets or a shop counter took the city away. Only the character picker
+  does that now, because it comes before there is anything to look at. The rest
+  are a panel in the middle of the screen, and the phone is a phone at the
+  right-hand edge, with the city left in view around them.
+
+  Every screen has the same parts in the same places: a title and Close with its
+  key at the top, a thin moving line under the title while the server is being
+  asked, the content, a strip for acting on the thing picked, and one line that
+  says what happened. Money is one style everywhere: right-aligned figures of
+  one width. Rows of things with something to press keep the button in one
+  column, so a player's eye finds it where it was on the last row.
+
+  This page holds what it was told and shows it. It does not know what a command
+  costs, whether one is allowed, or what a refusal means, because it is never
+  given a refusal code -- only a line to print. A screen that knows what it is
+  not allowed to do is a screen that can be edited to allow it, and this one is
+  a browser with developer tools in it.
+-->
+
+<!-- The character picker: the one screen that covers the game. -->
+<main id="picker" hidden>
+  <div class="picker-inner">
+    <header class="picker-head">
+      <div class="brand">
+        <h1>NYR<span>UNDERWORLD</span></h1>
+        <p class="promise">The city remembers.</p>
+      </div>
+      <button id="close" type="button" class="close-button">Close <kbd>Esc</kbd></button>
+    </header>
+
+    <section class="people">
+      <div class="section-head">
+        <h2>Who are you today</h2>
+        <span id="count" class="count"></span>
+      </div>
+
+      <ul id="list" class="rows"></ul>
+
+      <div id="empty" class="empty" hidden>
+        <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-passport"/></svg>
+        <p>Nobody yet. The city does not know you.</p>
+      </div>
+    </section>
+
+    <section class="make">
+      <div class="section-head">
+        <h2>Somebody new</h2>
+      </div>
+      <form id="new-person" autocomplete="off">
+        <input id="first" name="first" type="text" placeholder="First name" aria-label="First name" maxlength="24" spellcheck="false">
+        <input id="last" name="last" type="text" placeholder="Last name" aria-label="Last name" maxlength="24" spellcheck="false">
+        <button type="submit" class="cta">Begin</button>
+      </form>
+    </section>
+
+    <p id="message" class="message" hidden role="status" aria-live="polite"></p>
+  </div>
+</main>
+
+<!--
+  One row, cloned per person. Kept as a template so no markup is ever built by
+  pasting a name into a string: every value below is set with textContent, and
+  a name is somebody's typing.
+-->
+<template id="row">
+  <li class="person row">
+    <div class="who row-main">
+      <span class="name"></span>
+      <span class="note"></span>
+    </div>
+    <span class="money"></span>
+    <div class="acts row-acts">
+      <button type="button" class="play primary">Play</button>
+      <button type="button" class="retire quiet">Retire</button>
+    </div>
+  </li>
+</template>
+
+<!--
+  Pockets. A grid because that is how somebody looks for a thing they own:
+  by shape and position, not by reading a list top to bottom.
+-->
+<main id="pockets" class="panel" hidden>
+  <header class="screen-head">
+    <h1 class="screen-title">Pockets</h1>
+    <div class="load">
+      <span id="pockets-slots" class="count"></span>
+      <div class="bar"><i id="pockets-bar"></i></div>
+      <span id="pockets-weight" class="count"></span>
+    </div>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+
+  <div class="screen-body">
+    <ul id="grid" class="grid"></ul>
+    <div id="pockets-empty" class="empty" hidden>
+      <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-package"/></svg>
+      <p>You are carrying nothing.</p>
+    </div>
+  </div>
+
+  <section id="carry-act" class="act" hidden>
+    <h2 id="carry-name"></h2>
+    <form id="carry-form" autocomplete="off">
+      <input id="carry-count" type="text" inputmode="numeric" value="1" maxlength="5" aria-label="How many">
+      <button type="submit" class="quiet">Drop</button>
+      <button type="button" id="carry-use" class="cta">Use</button>
+      <button type="button" id="carry-cancel" class="quiet">Back</button>
+    </form>
+  </section>
+
+  <p id="pockets-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<!--
+  The phone, shaped like one and held at the edge of the screen. Who has been in
+  touch above, what was said below.
+-->
+<main id="phone" class="device" hidden>
+  <header class="screen-head">
+    <div class="titles">
+      <h1 class="screen-title">Phone</h1>
+      <span id="phone-number" class="screen-note"></span>
+    </div>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+
+  <div class="phone-body">
+    <section class="threads">
+      <h2>Messages</h2>
+      <ul id="threads"></ul>
+      <div id="phone-empty" class="empty small" hidden>
+        <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-phone"/></svg>
+        <p>Nobody has been in touch.</p>
+      </div>
+      <form id="phone-new" autocomplete="off">
+        <input id="phone-to" type="text" placeholder="555-000000" maxlength="16" spellcheck="false" aria-label="Number">
+        <button type="submit" class="primary">Open</button>
+      </form>
+    </section>
+
+    <section class="conversation">
+      <h2 id="conversation-with">Nobody</h2>
+      <ol id="messages"></ol>
+      <p id="conversation-empty" class="empty-line" hidden>Pick a number, or type one.</p>
+      <form id="phone-send" autocomplete="off" hidden>
+        <input id="phone-body" type="text" placeholder="Say something" maxlength="240" aria-label="Message">
+        <button type="submit" class="cta">Send</button>
+      </form>
+    </section>
+  </div>
+
+  <p id="phone-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<template id="slot">
+  <li class="slot">
+    <svg class="slot-icon item-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-package"/></svg>
+    <span class="slot-label"></span>
+    <span class="slot-stack"></span>
+  </li>
+</template>
+
+<template id="thread-row">
+  <li class="thread">
+    <span class="thread-number"></span>
+    <span class="thread-when"></span>
+    <span class="thread-last"></span>
+  </li>
+</template>
+
+<template id="message-row">
+  <li class="msg">
+    <span class="msg-body"></span>
+    <span class="msg-when"></span>
+  </li>
+</template>
+
+<!--
+  The counter. A price list is a table because that is what a price list is:
+  rows of the same facts, read down a column.
+-->
+<main id="shop" class="panel" hidden>
+  <header class="screen-head">
+    <div class="titles">
+      <h1 class="screen-title" id="shop-name">Shop</h1>
+      <span id="shop-state" class="chip"></span>
+    </div>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+
+  <div class="screen-body">
+    <table class="prices">
+      <thead>
+        <tr><th>Item</th><th class="num">Price</th><th class="num">They pay</th><th class="num">In stock</th><th class="act-col"></th></tr>
+      </thead>
+      <tbody id="prices"></tbody>
+    </table>
+    <div id="shop-empty" class="empty" hidden>
+      <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-package"/></svg>
+      <p>Nothing behind the counter.</p>
+    </div>
+  </div>
+
+  <section id="deal" class="act" hidden>
+    <h2 id="deal-name"></h2>
+    <form id="deal-form" autocomplete="off">
+      <input id="deal-count" type="text" inputmode="numeric" value="1" maxlength="5" aria-label="How many">
+      <button type="submit" class="cta">Buy</button>
+      <button type="button" id="deal-sell" class="primary">Sell</button>
+      <button type="button" id="deal-cancel" class="quiet">Back</button>
+    </form>
+  </section>
+
+  <p id="shop-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<!--
+  A stash. Two containers side by side, drawn the same way, because moving a
+  thing is the same gesture in both directions.
+-->
+<main id="stash" class="panel" hidden>
+  <header class="screen-head">
+    <div class="titles">
+      <h1 class="screen-title">Stash</h1>
+      <span id="stash-address" class="screen-note"></span>
+    </div>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+
+  <div class="screen-body two-ways">
+    <section class="side">
+      <h2>On you <span id="here-load" class="count"></span></h2>
+      <ul id="here" class="grid small"></ul>
+      <div id="here-empty" class="empty small" hidden>
+        <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-package"/></svg>
+        <p>You are carrying nothing.</p>
+      </div>
+    </section>
+    <section class="side">
+      <h2>Here <span id="there-load" class="count"></span></h2>
+      <ul id="there" class="grid small"></ul>
+      <div id="there-empty" class="empty small" hidden>
+        <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-package"/></svg>
+        <p>Nothing put down yet.</p>
+      </div>
+    </section>
+  </div>
+
+  <section id="shift" class="act" hidden>
+    <h2 id="shift-name"></h2>
+    <form id="shift-form" autocomplete="off">
+      <input id="shift-count" type="text" inputmode="numeric" value="1" maxlength="5" aria-label="How many">
+      <button type="submit" class="cta" id="shift-go">Move</button>
+      <button type="button" id="shift-cancel" class="quiet">Back</button>
+    </form>
+  </section>
+
+  <p id="stash-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<!--
+  What is close enough to walk up to. Opened on its own key, and the way into
+  both screens above.
+-->
+<main id="nearby" class="panel" hidden>
+  <header class="screen-head">
+    <h1 class="screen-title">Around you</h1>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+  <div class="screen-body">
+    <ul id="around" class="rows"></ul>
+    <div id="nearby-empty" class="empty" hidden>
+      <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-passport"/></svg>
+      <p>Nothing within reach. Walk up to something.</p>
+    </div>
+  </div>
+  <p id="nearby-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<!--
+  A bank counter. What is in the account is what the ledger says: every figure
+  here arrived formatted and nothing on this page adds anything up.
+-->
+<main id="bank" class="panel" hidden>
+  <header class="screen-head">
+    <div class="titles">
+      <h1 class="screen-title">Bank</h1>
+      <span id="bank-number" class="screen-note"></span>
+    </div>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+  <div class="strip bank-summary">
+    <div class="balance">
+      <span class="strip-label">Balance</span>
+      <span id="bank-balance" class="bank-balance money"></span>
+    </div>
+    <div id="bank-counter" class="bank-counter" hidden>
+      <label class="field">
+        <span>Amount ($)</span>
+        <input id="bank-amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00">
+      </label>
+      <button id="bank-deposit" type="button" class="cta">Pay in</button>
+      <button id="bank-withdraw" type="button" class="primary">Take out</button>
+    </div>
+    <button id="bank-open" class="cta" type="button" hidden>Open an account</button>
+  </div>
+  <div class="screen-body">
+    <ul id="bank-lines" class="rows"></ul>
+    <div id="bank-empty" class="empty" hidden>
+      <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-passport"/></svg>
+      <p>Nothing has moved through this account yet.</p>
+    </div>
+  </div>
+  <p id="bank-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<!--
+  Who is hiring. Every number is a count to draw; whether a shift may be taken
+  on is the server refusing, so the page always offers the row.
+-->
+<main id="jobs" class="panel" hidden>
+  <header class="screen-head">
+    <h1 class="screen-title">Work</h1>
+    <button class="close-screen close-button" type="button">Close <kbd>Esc</kbd></button>
+  </header>
+  <div id="jobs-shift" class="strip" hidden>
+    <span id="jobs-doing" class="strip-text"></span>
+    <div class="strip-acts">
+      <button id="jobs-finish" class="cta" type="button">Clock off</button>
+      <button id="jobs-abandon" class="primary" type="button">Walk off</button>
+    </div>
+  </div>
+  <div class="screen-body">
+    <ul id="jobs-list" class="rows"></ul>
+    <div id="jobs-empty" class="empty" hidden>
+      <svg class="empty-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-watch"/></svg>
+      <p>Nobody is hiring.</p>
+    </div>
+  </div>
+  <p id="jobs-message" class="message" hidden role="status" aria-live="polite"></p>
+</main>
+
+<!--
+  The rows. A bank line, a job and a door share one shape: what it is and a
+  line under it, the money in its column, and what can be pressed in the last
+  column. The money keeps its column when a row has none, so the figures stay in
+  a line down the screen.
+-->
+<template id="bank-line">
+  <li class="place row no-acts">
+    <span class="row-main"><span class="place-what"></span><span class="place-where"></span></span>
+    <span class="place-price money"></span>
+  </li>
+</template>
+
+<template id="job-row">
+  <li class="place row">
+    <span class="row-main"><span class="place-what"></span><span class="place-where"></span></span>
+    <span class="place-price money"></span>
+    <span class="row-acts"><button type="button" class="job-take primary">Take it</button></span>
+  </li>
+</template>
+
+<template id="price-row">
+  <tr class="price">
+    <td><span class="price-item"><svg class="item-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#item-package"/></svg><span class="price-label"></span></span></td>
+    <td class="num"><span class="price-buy money"></span></td>
+    <td class="num"><span class="price-sell money"></span></td>
+    <td class="num price-stock"></td>
+    <td class="act-col"><button type="button" class="price-pick primary">Trade</button></td>
+  </tr>
+</template>
+
+<!--
+  A door. The price and the buy are hidden on anything that is not for sale,
+  which is every shop counter and every place somebody already lives in. What
+  the button sends is the address and nothing else: the page has never been
+  trusted with what a thing costs.
+-->
+<template id="place-row">
+  <li class="place row">
+    <span class="row-main"><span class="place-what"></span><span class="place-where"></span></span>
+    <span class="place-price money" hidden></span>
+    <span class="row-acts">
+      <button type="button" class="place-buy" hidden>Buy</button>
+      <button type="button" class="place-go primary"></button>
+    </span>
+  </li>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

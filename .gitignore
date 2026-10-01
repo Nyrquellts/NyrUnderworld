@@ -1,0 +1,24 @@
+# build and run artefacts
+*.log
+*.bak
+*.tmp
+/run/
+/cache/
+# vendored reference resources are cloned, never committed
+/vendor/
+# never commit a licence key or any server secret
+*.cfg.local
+.env
+
+# The city itself is per-server state; the folder it lives in is not.
+/data/*.json
+/data/*.json.bak
+/data/*.json.tmp
+
+# Who is selling this is the owner's business and nobody else's to hold.
+# docs/seller.example.json is the template and is committed; the filled copy
+# never is, and neither is anything generated from it.
+docs/seller.local.json
+*.local.json
+__pycache__/
+

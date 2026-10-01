@@ -1,0 +1,6 @@
+{
+  "nyr": 1,
+  "outputs": [
+    {"source": "tools/nyr/standing_decay.nyr", "target": "lua", "output": "domain/rules/standing_decay.lua"}
+  ]
+}

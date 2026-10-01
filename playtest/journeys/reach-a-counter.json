@@ -1,0 +1,123 @@
+{
+  "name": "reach-a-counter",
+  "capability": "shops",
+  "asks": "Can a player who has just arrived find a shop, get to it, open it, see a price, and buy something \u2014 without being told an id?",
+  "steps": [
+    {
+      "check": "action",
+      "do": "character.release",
+      "expect": "any",
+      "says": "Start from nobody. Whether this answers ok or not_playing depends only on which journey ran before it, so the step asks for neither: it is putting the city into a known state, not asserting one."
+    },
+    {
+      "check": "action",
+      "do": "character.create",
+      "args": {
+        "first_name": "Wen",
+        "last_name": "Adeyemi"
+      },
+      "expect": "ok",
+      "says": "Somebody to be. This is journey 1: arrive and become a person.",
+      "save": "wen"
+    },
+    {
+      "check": "feedback",
+      "value": true,
+      "says": "Creating somebody has to hand back who was created, or the screen that made them cannot then be them. This is the defect that once left a new player staring at a generic error over a character that existed."
+    },
+    {
+      "check": "action",
+      "do": "character.select",
+      "args": {
+        "character": "{wen}"
+      },
+      "expect": "ok",
+      "says": "And being them. Creating somebody and then not being them is a dead end, and it was the one a new player fell into: the character existed, none was selected, and the server answered not_playing forever."
+    },
+    {
+      "check": "state",
+      "read": "character.list",
+      "says": "And the city agrees they exist.",
+      "fields": {}
+    },
+    {
+      "check": "discovery",
+      "by": "me.map",
+      "in": "places",
+      "naming": "shop",
+      "save": "counter",
+      "says": "The one that matters, and the one this city could not answer until blips existed. `me.map` says where the things a player can use are, so a shop can be found from anywhere rather than only by standing on top of it. It needs no body, which is why this check is makeable with nobody connected -- discovery is a fact about the city, not about where somebody happens to be standing."
+    },
+    {
+      "check": "discovery",
+      "client": "marked",
+      "says": "And the half a player actually sees. The server naming a shop when the journey asks is not the client having put a mark on the map: the client asks for the map by itself, at a moment of its own choosing, and draws whatever it was told then. This reads the marks the client drew, not what the server would say."
+    },
+    {
+      "check": "reachability",
+      "at": [
+        -47.0,
+        -1757.0,
+        30.0,
+        50.0
+      ],
+      "confirm": "me.nearby",
+      "in": "shops",
+      "says": "Rob's Liquor, from config.lua. The body is sent there and the server is asked whether it agrees \u2014 the two have disagreed before, over an address fifty-one metres above the street that a body falls out of."
+    },
+    {
+      "check": "discovery",
+      "by": "me.nearby",
+      "in": "shops",
+      "naming": "shop",
+      "says": "And the close-up half, asked where it can answer: at the counter. `me.nearby` answers what is within reach, so it is asked after the body has been sent to the door. Asked before, from wherever the spawn left somebody, it correctly finds nothing, and a journey that asked it there would fail the city for the order of its own steps.",
+      "needs": "client",
+      "why": "it asks the server where somebody is standing"
+    },
+    {
+      "check": "presentation",
+      "client": "prompt",
+      "says": "Standing at the counter, the press-E prompt. It is drawn only within three metres and only where there is a screen behind the key, so a player who reaches the door and sees no prompt has no way to know the door does anything."
+    },
+    {
+      "check": "presentation",
+      "screen": "nearby",
+      "says": "The Around you screen, opened through the function its key calls. There are blips and markers now, so this is no longer the whole of discovery -- it is the close-up half, after the map has got somebody to the door."
+    },
+    {
+      "check": "presentation",
+      "screen": "nearby",
+      "by": "nyrnearby",
+      "says": "And the key a player actually presses (F5), pressed rather than the function behind it. Every key closes whatever is up, so the check clears the screen first; otherwise the press would close the screen the step before opened, and read as a key that works."
+    },
+    {
+      "check": "action",
+      "do": "shop.list",
+      "args": {
+        "shop": "{counter}"
+      },
+      "expect": "ok",
+      "says": "The counter, opened by the id discovery handed over. If the discovery step could not name one this cannot run, which is the point of ordering them this way.",
+      "needs": "client",
+      "why": "it asks the server where somebody is standing"
+    },
+    {
+      "check": "feedback",
+      "value": "lines.0.label",
+      "says": "A price list a player can read: the item has a name, not only an id.",
+      "needs": "client",
+      "why": "the counter it would read has not been opened"
+    },
+    {
+      "check": "state",
+      "read": "shop.list",
+      "args": {
+        "shop": "{counter}"
+      },
+      "says": "What the counter holds, read back from the city rather than remembered.",
+      "fields": {},
+      "needs": "client",
+      "why": "it asks the server where somebody is standing"
+    }
+  ]
+}

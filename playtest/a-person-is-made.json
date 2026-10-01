@@ -1,0 +1,121 @@
+{
+  "name": "a-person-is-made",
+  "asks": "Can somebody arrive, become a person, and be handed their opening money without any of it appearing from nowhere?",
+  "steps": [
+    {
+      "do": "character.list",
+      "expect": "ok",
+      "check": {
+        "limit": 3
+      },
+      "says": "A new account has nobody yet, and asking is not an error."
+    },
+    {
+      "do": "character.create",
+      "args": {
+        "first_name": "Jane",
+        "last_name": "Doe"
+      },
+      "expect": "ok",
+      "save": "jane",
+      "says": "The first person this account has ever had."
+    },
+    {
+      "do": "character.create",
+      "args": {
+        "first_name": "J4ne",
+        "last_name": "Doe"
+      },
+      "expect": "bad_args",
+      "says": "A name goes into chat, onto an ID card and into a database. Digits are not a name -- and it is the command's own declaration that refuses it, before any handler runs, which is why the code is bad_args and not bad_name."
+    },
+    {
+      "do": "character.list",
+      "expect": "ok",
+      "check": {
+        "characters.0.character": "{jane}",
+        "characters.0.name": "Jane Doe",
+        "characters.0.wallet": 50000,
+        "characters.0.playing": false
+      },
+      "says": "She exists, she is not being played, and her opening money is exactly five hundred."
+    },
+    {
+      "do": "character.select",
+      "args": {
+        "character": "{jane}"
+      },
+      "expect": "ok"
+    },
+    {
+      "do": "character.select",
+      "args": {
+        "character": "{jane}"
+      },
+      "expect": "ok",
+      "says": "Selecting who you are already being is not an error. It is the same request twice, and it answers the same way."
+    },
+    {
+      "do": "character.create",
+      "args": {
+        "first_name": "John",
+        "last_name": "Roe"
+      },
+      "expect": "ok",
+      "save": "john"
+    },
+    {
+      "do": "character.select",
+      "args": {
+        "character": "{john}"
+      },
+      "expect": "already_playing",
+      "says": "One account plays one person at a time. Two live copies of one wallet is how money gets spent twice, so switching without letting go is refused."
+    },
+    {
+      "do": "character.release",
+      "expect": "ok",
+      "says": "Letting go is the way to switch."
+    },
+    {
+      "do": "character.select",
+      "args": {
+        "character": "{john}"
+      },
+      "expect": "ok"
+    },
+    {
+      "do": "character.release",
+      "expect": "ok"
+    },
+    {
+      "do": "character.select",
+      "args": {
+        "character": "{jane}"
+      },
+      "expect": "ok",
+      "says": "And back, with everything she had still hers."
+    },
+    {
+      "do": "me.status",
+      "expect": "ok",
+      "check": {
+        "name": "Jane Doe",
+        "state": "active",
+        "wallet": 50000,
+        "heat": 0
+      },
+      "says": "Everything a heads-up display needs, in one read that changes nothing."
+    },
+    {
+      "do": "me.pockets",
+      "expect": "ok",
+      "check": {
+        "slots_used": 1,
+        "items.0.item": "phone",
+        "items.0.count": 1
+      },
+      "says": "She is carrying a phone and nothing else. Nobody handed it to her: the phone system listens for character.created and issues one, which is why the city can reach her before she has done anything."
+    }
+  ]
+}

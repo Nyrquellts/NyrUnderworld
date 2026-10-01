@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "Copy this file to docs/seller.local.json and fill it in. That filename is",
+    "gitignored, so it is never committed, never staged into a release, and",
+    "never leaves this machine. Do not put these values in this file -- this one",
+    "is the template and IS committed.",
+    "",
+    "Nothing here needs to be said out loud to an agent. Fill the copy yourself",
+    "and run `python docs/fill_seller.py`; it writes finished documents into",
+    "run/legal/, which is also gitignored.",
+    "",
+    "On what actually has to be public: the values Tebex needs to pay you are",
+    "given to Tebex, not printed on the listing. What a storefront must show a",
+    "consumer is a separate question and depends on where you are trading from,",
+    "so the brand and the legal name are two fields here rather than one.",
+    "I am not a lawyer and this file is not legal advice."
+  ],
+
+  "identity": {
+    "LEGAL NAME": "",
+    "CONFIRMED BRAND": "",
+    "BUSINESS CONTACT ADDRESS / JURISDICTION": "",
+    "SUPPORT CHANNEL": "",
+    "PRIVACY EMAIL": ""
+  },
+
+  "policy": {
+    "EXACT PACKAGE": "",
+    "DEFINED PERIOD OR OBJECTIVE CRITERIA": "",
+    "SPECIFIC PURPOSES AND LAWFUL BASIS": "",
+    "PEOPLE/PROVIDERS": ""
+  },
+
+  "$notes": {
+    "LEGAL NAME": "The name you would sign a contract with. A personal name is normal for a sole trader.",
+    "CONFIRMED BRAND": "What the listing says it is sold by. This is the one most buyers will ever see.",
+    "BUSINESS CONTACT ADDRESS / JURISDICTION": "At minimum the country. Whether a full address must appear publicly depends on where you trade and whether you are a company; a registered office or service address is the usual way to avoid publishing a home one.",
+    "SUPPORT CHANNEL": "One monitored inbox or ticket channel. Tebex's Creator Agreement section 4 requires monitored contact and a 72-hour first response. It does not have to contain your name.",
+    "PRIVACY EMAIL": "May be the same as the support channel.",
+    "EXACT PACKAGE": "What a buyer receives on purchase, named precisely.",
+    "DEFINED PERIOD OR OBJECTIVE CRITERIA": "How long support correspondence is kept.",
+    "SPECIFIC PURPOSES AND LAWFUL BASIS": "Why any buyer data is held.",
+    "PEOPLE/PROVIDERS": "Who else touches it. Tebex at minimum."
+  }
+}

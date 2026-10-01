@@ -1,0 +1,1112 @@
+<title>NYR Underworld</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,400;0,500;0,600;1,6..72,400&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --keyart: url("data:image/jpeg;base64,__NYR_KEYART__");
+  /* Taken from the resource's own stylesheet, not chosen again. The page and
+     the thing it sells share one palette because they are the same product. */
+  --ground: #0b0a09;
+  --raised: #15110f;
+  --sunk: #080706;
+  --ink: #efe7dc;
+  --dim: #9a9088;
+  --faint: #6b635c;
+  --amber: #d99a3f;
+  --amber-lit: #e8ac52;
+  --rust: #c2603f;
+  --edge: rgba(239, 231, 220, 0.10);
+  --edge-firm: rgba(239, 231, 220, 0.20);
+
+  --display: "Newsreader", "Iowan Old Style", Palatino, Georgia, serif;
+  --sans: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+
+  --measure: 62ch;
+  --pad: clamp(20px, 6vw, 88px);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; }
+h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; }
+p { margin: 0 0 1.05em; }
+p:last-child { margin-bottom: 0; }
+a { color: var(--amber); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+code, .fig { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.tab {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--faint);
+  display: block;
+  margin-bottom: 14px;
+}
+
+section { padding: clamp(54px, 8vh, 100px) var(--pad); border-top: 1px solid var(--edge); }
+.wide { max-width: 1180px; margin: 0 auto; }
+.prose { max-width: var(--measure); }
+
+h2.head { font-size: clamp(26px, 3.4vw, 37px); margin-bottom: 16px; letter-spacing: -0.005em; }
+.sub { color: var(--dim); max-width: var(--measure); font-size: 16.5px; }
+.sub strong { color: var(--ink); font-weight: 500; }
+
+/* ====================================================== the commercial path */
+
+/* One loud element on the whole page, and it is always this. */
+.buy {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+  background: var(--amber);
+  color: #120d06;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  padding: 15px 28px;
+  border: 1px solid var(--amber);
+  text-decoration: none;
+  transition: background 140ms ease, transform 140ms ease;
+  white-space: nowrap;
+}
+.buy:hover { background: var(--amber-lit); transform: translateY(-1px); }
+.buy .tagprice { font-family: var(--mono); font-weight: 500; opacity: 0.72; font-size: 14px; }
+
+.buy-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  border: 1px solid var(--edge-firm);
+  padding: 15px 24px;
+  font-size: 15px;
+  text-decoration: none;
+  transition: border-color 140ms ease, color 140ms ease;
+  white-space: nowrap;
+}
+.buy-ghost:hover { border-color: var(--amber); color: var(--amber); }
+.buy-ghost span { font-family: var(--mono); font-size: 12px; color: var(--faint); }
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+
+/* The recurring close. A rule, not a banner: it reads as part of the document. */
+.close {
+  border-top: 1px solid var(--edge-firm);
+  border-bottom: 1px solid var(--edge-firm);
+  padding: 26px 0;
+  margin-top: clamp(38px, 5vw, 56px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px 34px;
+  align-items: center;
+  justify-content: space-between;
+}
+.close p { margin: 0; color: var(--dim); font-size: 16px; max-width: 54ch; }
+.close p b { color: var(--ink); font-weight: 500; font-family: var(--display); font-size: 18px; }
+
+/* Slim, and only after the hero has gone. */
+.rail {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px clamp(16px, 4vw, 40px);
+  background: rgba(8, 7, 6, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--edge);
+  transform: translateY(-102%);
+  transition: transform 200ms ease;
+}
+.rail.up { transform: none; }
+.rail .mark {
+  font-family: var(--display);
+  letter-spacing: 0.16em;
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.rail .mark i { font-style: normal; color: var(--amber); }
+.rail .buy { padding: 9px 20px; font-size: 14px; }
+.rail .said { color: var(--faint); font-size: 12.5px; font-family: var(--mono); }
+@media (max-width: 760px) { .rail .said { display: none; } }
+
+/* ------------------------------------------------------------------- hero */
+
+/* The key art sits behind the masthead. Its left third is almost black, which
+   is where the words go; the scrim only deepens what is already there so the
+   type never fights the picture. */
+.hero {
+  position: relative;
+  border-top: 0;
+  padding-top: clamp(38px, 6vh, 76px);
+  padding-bottom: clamp(34px, 5vh, 60px);
+  background: #0d0b0a;
+  isolation: isolate;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--keyart);
+  background-size: cover;
+  background-position: 70% 50%;
+  opacity: 0.85;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(100deg, rgba(11,10,9,0.97) 0%, rgba(11,10,9,0.90) 34%,
+                    rgba(11,10,9,0.55) 58%, rgba(11,10,9,0.72) 100%),
+    linear-gradient(180deg, rgba(11,10,9,0.55), rgba(11,10,9,0.20) 40%, var(--ground));
+}
+.hero > * { position: relative; }
+@media (max-width: 939px) {
+  .hero::before { background-position: 62% 40%; opacity: 0.55; }
+}
+.hero-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(32px, 4.4vw, 54px);
+  align-items: center;
+}
+@media (min-width: 940px) { .hero-grid { grid-template-columns: 1.02fr 1fr; } }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 20px;
+}
+.wordmark {
+  font-family: var(--display);
+  font-size: clamp(36px, 5.6vw, 66px);
+  line-height: 0.98;
+  letter-spacing: 0.055em;
+  font-weight: 500;
+}
+.wordmark span {
+  display: block;
+  color: var(--amber);
+  font-size: 0.40em;
+  letter-spacing: 0.38em;
+  margin-top: 0.5em;
+}
+.promise {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--dim);
+  font-size: clamp(16px, 1.8vw, 20px);
+  margin: 20px 0 0;
+}
+.what {
+  margin: 22px 0 26px;
+  font-size: 17px;
+  color: var(--ink);
+  max-width: 48ch;
+  line-height: 1.56;
+}
+.what b { color: var(--amber); font-weight: 500; }
+
+.pricing { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+.pricing .amount {
+  font-family: var(--mono);
+  font-size: clamp(34px, 4.4vw, 46px);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.pricing .terms { color: var(--faint); font-size: 13px; font-family: var(--mono); line-height: 1.5; }
+
+.pricing .terms b {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.under {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--dim);
+  letter-spacing: 0.03em;
+  margin: -14px 0 26px;
+}
+.reassure { margin-top: 16px; color: var(--faint); font-size: 13px; font-family: var(--mono); }
+
+/* The hero panel is the demo, so it says what it is and it moves. */
+.stage { display: flex; flex-direction: column; gap: 14px; }
+.stage-say { margin: 0; color: var(--dim); font-size: 14px; line-height: 1.5; min-height: 3.1em; }
+.stage-say b { color: var(--ink); font-weight: 500; font-family: var(--display); font-size: 16px; }
+.stage-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.dots { display: flex; gap: 7px; }
+.dots button {
+  width: 22px; height: 3px; padding: 0;
+  border: 0; background: var(--edge-firm); cursor: pointer;
+  transition: background 160ms ease;
+}
+.dots button[aria-current="true"] { background: var(--amber); }
+.stage-tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+
+/* The four facts a buyer needs before they will read anything else. */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1px;
+  background: var(--edge);
+  border: 1px solid var(--edge);
+  max-width: 1180px;
+  margin: clamp(32px, 4vw, 46px) auto 0;
+}
+.cell { background: var(--ground); padding: 17px 19px 19px; margin: 0; }
+.cell dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 7px;
+}
+.cell dd { margin: 0; font-size: 14.5px; color: var(--ink); line-height: 1.45; }
+.cell dd small { display: block; color: var(--dim); font-size: 12.5px; margin-top: 3px; line-height: 1.45; }
+.cell .yes { color: var(--amber); font-weight: 500; }
+
+/* ---------------------------------------------------------------- screens */
+
+.screen-frame {
+  position: relative;
+  border: 1px solid var(--edge-firm);
+  background: var(--sunk);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+/* Default: the frame fills its box and the interface lays itself out for that
+   width -- correct, readable, and requiring nothing to run. Script then swaps
+   it for the 1280-wide render scaled down, which is what a player actually
+   sees. There is deliberately no loading overlay: an overlay that a script has
+   to remove is a black rectangle waiting to happen. */
+.screen-frame iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+  transform-origin: top left;
+  pointer-events: none;
+}
+.screen-frame.crisp iframe { width: 1280px; height: 800px; }
+
+.gallery { display: grid; gap: clamp(24px, 3.4vw, 42px); }
+@media (min-width: 860px) { .gallery { grid-template-columns: 1fr 1fr; } }
+figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+figcaption { color: var(--dim); font-size: 14.5px; line-height: 1.5; max-width: 52ch; }
+figcaption b { color: var(--ink); font-weight: 500; font-family: var(--display); font-size: 17px; display: block; margin-bottom: 3px; }
+
+/* ------------------------------------------------------------------- code */
+
+pre {
+  margin: 0;
+  padding: 19px 21px;
+  background: var(--sunk);
+  border: 1px solid var(--edge);
+  border-left: 2px solid var(--amber);
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.74;
+  color: var(--ink);
+}
+pre.refusal { border-left-color: var(--rust); color: var(--dim); }
+pre .k { color: var(--amber); }
+pre .c { color: var(--faint); font-style: italic; }
+pre .s { color: #b8c79a; }
+pre .ok { color: #8fae6b; }
+pre .bad { color: var(--rust); }
+pre .lo { color: var(--faint); }
+
+.two { display: grid; gap: clamp(24px, 3.6vw, 42px); align-items: start; }
+@media (min-width: 900px) { .two { grid-template-columns: 1fr 1fr; } }
+
+/* ----------------------------------------------------------------- tables */
+
+.spec { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.spec th, .spec td { text-align: left; padding: 13px 16px 13px 0; border-bottom: 1px solid var(--edge); vertical-align: top; }
+.spec th { color: var(--faint); font-weight: 400; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; padding-right: 28px; }
+.spec td { color: var(--dim); }
+.spec td b { color: var(--ink); font-weight: 500; }
+.spec td .yes { color: var(--amber); font-weight: 500; }
+.spec td .no { color: var(--rust); font-weight: 500; }
+.spec tr:last-child th, .spec tr:last-child td { border-bottom: 0; }
+.scroll-x { overflow-x: auto; }
+
+/* --------------------------------------------------------------- systems */
+
+/* A catalogue, not a feature grid: entries with their command counts, read
+   down a column the way somebody reads an index. */
+.index { display: grid; gap: 0 clamp(30px, 4vw, 56px); }
+@media (min-width: 820px) { .index { grid-template-columns: 1fr 1fr; } }
+.entry { padding: 15px 0; border-bottom: 1px solid var(--edge); display: grid; grid-template-columns: 1fr auto; gap: 5px 20px; align-items: baseline; }
+.entry h3 { font-size: 18px; }
+.entry .n { font-family: var(--mono); font-size: 11px; color: var(--faint); white-space: nowrap; }
+.entry p { grid-column: 1 / -1; margin: 0; color: var(--dim); font-size: 14px; line-height: 1.5; }
+
+/* ----------------------------------------------------------------- steps */
+
+.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; gap: 18px; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; }
+.steps li::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--amber);
+  border: 1px solid var(--edge-firm);
+  padding: 4px 8px;
+  line-height: 1;
+}
+.steps p { color: var(--dim); font-size: 15px; margin: 0; }
+.steps b { color: var(--ink); font-weight: 500; }
+.steps code { background: var(--sunk); border: 1px solid var(--edge); padding: 2px 6px; font-size: 13px; color: var(--amber); }
+
+/* ------------------------------------------------------------------ lists */
+
+.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 13px; }
+.plain li { display: grid; grid-template-columns: auto 1fr; gap: 13px; align-items: baseline; color: var(--dim); font-size: 15px; }
+.plain li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--amber); transform: translateY(-3px); }
+.plain li b { color: var(--ink); font-weight: 500; }
+.gaps li::before { background: var(--rust); }
+
+/* ------------------------------------------------------------------- end */
+
+footer.end { padding: clamp(34px, 5vh, 60px) var(--pad); border-top: 1px solid var(--edge); color: var(--faint); font-size: 13px; }
+footer.end .wide { display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: baseline; justify-content: space-between; }
+footer.end b { color: var(--dim); font-weight: 400; font-family: var(--display); font-style: italic; font-size: 15px; }
+footer.end .legal { display: block; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--edge); }
+footer.end .legal p { max-width: 76ch; font-size: 12.5px; line-height: 1.65; color: var(--faint); margin: 0 0 10px; }
+footer.end .legal strong { color: var(--dim); font-weight: 500; }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<!-- ========================================================= the rail ===== -->
+
+<div class="rail" id="rail">
+  <span class="mark">NYR <i>UNDERWORLD</i></span>
+  <span class="said">Standalone &middot; no dependencies &middot; readable source</span>
+  <a class="buy" data-store href="#buy">Buy Now <span class="tagprice">$49</span></a>
+</div>
+
+<!-- ============================================================= hero ===== -->
+
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <p class="eyebrow">Standalone city &middot; life &middot; crime framework for FiveM</p>
+      <h1 class="wordmark">NYR<span>Underworld</span></h1>
+      <p class="promise">The city remembers.</p>
+
+      <p class="what">One connected FiveM framework for <b>characters, money,
+      property, work, crime</b> &mdash; and a city that remembers what happened in it.
+      Install one resource and start building your city.</p>
+
+      <p class="under">15 integrated systems &middot; 8 interface screens &middot; 68 commands
+      &middot; readable Lua &middot; MySQL optional</p>
+
+      <div class="pricing">
+        <span class="amount">$49</span>
+        <span class="terms"><b>One-time purchase</b>
+        the servers you administer &middot; updates for 0.1.x</span>
+      </div>
+
+      <div class="cta-row">
+        <a class="buy" data-store href="#buy">Buy Now <span class="tagprice">$49</span></a>
+        <a class="buy-ghost" href="#demo">Watch the demo <span>live, in this page</span></a>
+      </div>
+
+      <p class="reassure">Instant download &middot; no escrow &middot; no phone-home &middot; no subscription</p>
+    </div>
+
+    <div class="stage">
+      <div class="screen-frame" id="stage-frame" data-screen="picker"
+           aria-label="The interface of the resource, running"></div>
+      <p class="stage-say" id="stage-say" role="status" aria-live="polite"></p>
+      <div class="stage-foot">
+        <div class="dots" id="dots" aria-label="Choose a screen"></div>
+        <span class="stage-tag">Live interface &mdash; not footage</span>
+      </div>
+    </div>
+  </div>
+
+  <dl class="strip">
+    <div class="cell">
+      <dt>Framework</dt>
+      <dd><span class="yes">Standalone Core.</span>
+      <small>Underworld owns its simulation and does not require ESX or QBCore.</small></dd>
+    </div>
+    <div class="cell">
+      <dt>Dependencies</dt>
+      <dd><span class="yes">None required.</span>
+      <small>oxmysql or mysql-async only if you want MySQL.</small></dd>
+    </div>
+    <div class="cell">
+      <dt>Source</dt>
+      <dd><span class="yes">Fully readable.</span>
+      <small>No escrow, no obfuscation, no encrypted files.</small></dd>
+    </div>
+    <div class="cell">
+      <dt>Licence</dt>
+      <dd>Yours to modify.
+      <small>The servers you administer. No cap on players, uptime or revenue.</small></dd>
+    </div>
+  </dl>
+</section>
+
+<!-- ============================================== proof: it is playable ===== -->
+
+<section class="wide" id="demo">
+  <span class="tab">The demo &mdash; running, not recorded</span>
+  <h2 class="head">Eight screens, and they are on this page</h2>
+  <p class="sub">Not screenshots and not a video. Each frame below is the
+  resource&rsquo;s own interface running in your browser &mdash; the same markup, the
+  same stylesheet the game loads &mdash; drawn from a city that was actually played:
+  Vic Ortega, <strong>$2,180.50</strong>, a flat on Integrity Way bought through the
+  ledger, and eleven pieces of scrap he has not sold yet.</p>
+
+  <div class="gallery" style="margin-top: 36px">
+    <figure>
+      <div class="screen-frame" data-screen="pockets"></div>
+      <figcaption><b>Pockets &mdash; F3</b>
+      Slots and weight both count, and the bar is drawn from numbers the server
+      sent. Whether one more thing fits is the server&rsquo;s answer, never the
+      page&rsquo;s.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="shop"></div>
+      <figcaption><b>A counter</b>
+      What they sell, what they pay, what is on the shelf. Scrap shows a dash and
+      zero stock because this shop takes it in and never sells it &mdash; the page
+      draws that rather than pretending.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="stash"></div>
+      <figcaption><b>Somewhere to put things down</b>
+      Two containers drawn the same way, because moving a thing is the same gesture
+      in both directions. Reach into a stash is a grant the server issues at the
+      door and expires.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="phone"></div>
+      <figcaption><b>Phone &mdash; F4</b>
+      Numbers, not names. The city keeps what was said, which is why police have
+      <code>mdt.messages</code> and why people are careful what they type.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="nearby"></div>
+      <figcaption><b>Around you &mdash; F5</b>
+      What is close enough to walk up to, decided server-side from where your ped
+      actually is. A door for sale says its price and offers Buy; a bank branch or a
+      shopfront offers nothing a player could never do there.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="bank"></div>
+      <figcaption><b>A bank counter &mdash; E at a branch</b>
+      The account number, the balance and the lines, every figure formatted by the
+      server; the page does no arithmetic. Every button names the branch it is
+      standing at, and the server still decides whether you are.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="jobs"></div>
+      <figcaption><b>The job board &mdash; F6</b>
+      Who is hiring, what a shift pays, how long it runs and how long until you may
+      take it again. Work has no address, so it opens on a key; whether you may
+      take a shift is the server refusing.</figcaption>
+    </figure>
+    <figure>
+      <div class="screen-frame" data-screen="picker"></div>
+      <figcaption><b>Who are you today &mdash; F2</b>
+      Three people to an account, one played at a time. Retiring somebody is
+      permanent, and the screen says so before it asks again.</figcaption>
+    </figure>
+  </div>
+
+  <div class="close">
+    <p><b>That is the product, not a mock-up.</b> Every pixel above ships in the
+    folder you download.</p>
+    <a class="buy" data-store href="#buy">Buy Now <span class="tagprice">$49</span></a>
+  </div>
+</section>
+
+<!-- ============================================= proof: it actually boots ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">Validation</span>
+    <h2 class="head">It is not allowed to ship until FXServer starts it</h2>
+    <p class="sub">Most resources ship when the seller thinks they work. This one
+    runs a gate first, and the gate boots a real FXServer against the
+    <strong>staged copy</strong> &mdash; the exact folder you download, not the source
+    tree. This is the output from the build on sale.</p>
+
+    <div class="two" style="margin-top: 30px">
+      <pre><span class="lo">$ nyrbb fivem release-check nyr_underworld</span>
+
+nyr_underworld 0.1.0-rc.6: <span class="ok">SHIPPABLE</span>  (112.0s)
+  <span class="ok">ok</span>   has fxmanifest.lua      present
+  <span class="ok">ok</span>   licence                 LICENSE ships with it
+  <span class="ok">ok</span>   manifest game           gta5, gta5enhanced
+  <span class="ok">ok</span>   no credentials          nothing credential-shaped
+  <span class="ok">ok</span>   check                   no high findings
+  <span class="ok">ok</span>   audit                   confidence high
+  <span class="ok">ok</span>   the staged copy boots   started on the legacy server
+  <span class="ok">ok</span>   playtest                2/2 as expected
+  61 file(s) staged, 1081 held back</pre>
+
+      <div class="scroll-x">
+        <table class="spec">
+          <tr><th>Boots</th><td><b>Proved, not asserted.</b> The gate deploys the staged folder to a real server and reads the console back, and it passes on both the Legacy and the Enhanced server. A file list can be argued with; a resource that will not start cannot.</td></tr>
+          <tr><th>Playtest</th><td>A scripted session drives the resource through its own command bus against that same staged copy. If staging dropped a file the resource needs, this fails.</td></tr>
+          <tr><th>Played</th><td><b>With a real client.</b> A FiveM client connected to the Enhanced server walked both of a new player&rsquo;s journeys &mdash; the map marks and press-E prompts drawn, Around you and the job board opened by their keys, a shop and a bank branch reached &mdash; with every check made and passed.</td></tr>
+          <tr><th>Tests</th><td><b>980</b>, in a few seconds, with no game and no server &mdash; the rules are plain Lua that knows nothing about FiveM.</td></tr>
+          <tr><th>Backdoor audit</th><td>Scanned for remote execution, self-modifying writes, exfiltration, ACE escalation and obfuscation. Every flagged family is accounted for by name in <code>audit-accepted.json</code>, which ships with it so you can read the reasoning.</td></tr>
+          <tr><th>Phone-home</th><td><span class="no">None.</span> Nothing in the resource contacts any server but your own.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <p class="sub" style="margin-top:26px"><strong>And what is not yet proved,
+    plainly:</strong> beyond the gate, one real client has played it and the loop
+    was recorded in-game on this build. That is not a hundred players on one box,
+    or a month against a production MySQL. Those are not claimed.</p>
+
+    <div class="close">
+      <p><b>Nothing here asks you to take a claim on trust.</b> The gate output ships
+      in the download beside the code it describes.</p>
+      <a class="buy" data-store href="#buy">Buy Now <span class="tagprice">$49</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= compatibility ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">Before you buy &mdash; will it work on your server</span>
+    <h2 class="head">The honest compatibility answer</h2>
+    <p class="sub">Read this part properly. It is the one thing that decides whether
+    this is right for you, and getting it wrong is how people end up asking for
+    refunds.</p>
+
+    <div class="two" style="margin-top: 30px">
+      <div class="scroll-x">
+        <table class="spec">
+          <tr><th>Fresh server</th><td><span class="yes">Yes.</span> The intended case. Drop it in, one <code>ensure</code>, and you have a city.</td></tr>
+          <tr><th>Existing ESX</th><td><span class="no">No.</span> It does not sit on ESX and does not read its players, jobs or money. It would be a second framework beside the first.</td></tr>
+          <tr><th>Existing QBCore</th><td><span class="no">No.</span> Same answer, same reason. There is no bridge, and this page will not pretend there is one.</td></tr>
+          <tr><th>Existing QBOX</th><td><span class="no">No.</span> No bridge is included or verified.</td></tr>
+          <tr><th>Map / vehicle / clothing packs</th><td><span class="yes">Yes.</span> Those are streamed assets and do not touch gameplay rules.</td></tr>
+          <tr><th>GTA V Legacy</th><td><span class="yes">Yes.</span> Declared and booted. The full playtest runs against the Legacy server.</td></tr>
+          <tr><th>GTA V Enhanced</th><td><span class="yes">Yes.</span> The manifest declares <code>gta5enhanced</code> and the Enhanced server starts it.</td></tr>
+          <tr><th>OneSync</th><td>Required &mdash; and the manifest declares it, so the server enforces it rather than failing quietly.</td></tr>
+          <tr><th>txAdmin</th><td><span class="yes">Yes.</span> It is an ordinary resource in <code>resources/</code>.</td></tr>
+        </table>
+      </div>
+      <div class="prose">
+        <p><strong style="color:var(--amber);font-weight:500">Said plainly:</strong>
+        NYR Underworld is what you run <em>instead of</em> ESX or QBCore, not
+        something you bolt onto one.</p>
+        <p>That narrows who it is for, and it is the reason it can be what it is. It
+        has no compatibility layer to work around, no other framework&rsquo;s
+        assumptions to honour, and no dependency that can break it on a Tuesday
+        because somebody else pushed an update.</p>
+        <p>If you are starting a server, or rebuilding one, that is the whole
+        argument. If you have two years of ESX data and players on it, this is not
+        the purchase for you, and you should not make it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== install ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">Installation</span>
+    <h2 class="head">Three lines, and no order of operations</h2>
+    <p class="sub">Nothing has to start before it. No framework to configure first,
+    no SQL file to import by hand, no shared object to wire up.</p>
+
+    <div class="two" style="margin-top: 30px">
+      <ol class="steps">
+        <li><div><p><b>Drop the folder into <code>resources/</code>.</b> A FiveM resource
+        is named by its folder, so the folder is <code>nyr_underworld</code>.</p></div></li>
+        <li><div><p><b>Add <code>ensure nyr_underworld</code> to server.cfg.</b> That is
+        the entire configuration required to start.</p></div></li>
+        <li><div><p><b>Start the server.</b> The city builds itself from
+        <code>config.lua</code> and tells you exactly what it made.</p></div></li>
+      </ol>
+      <pre><span class="lo">[nyr]</span> the city is kept in files under
+      nyr_underworld/data
+<span class="lo">[nyr]</span> added from config.lua: 2 employers,
+      4 addresses, 2 branches, 1 shops,
+      2 blocks, 1 fences
+<span class="lo">[nyr]</span> the city is at day 0 monday 08:00
+      with 0 people, 6 addresses</pre>
+    </div>
+
+    <p class="sub" style="margin-top:28px">Want it in MySQL instead?
+    <code>set nyr_store database</code>. The table is created on first boot and it
+    speaks to the oxmysql you already run. That is the whole migration.</p>
+  </div>
+</section>
+
+<!-- ====================================================== configurable ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">Make it your city</span>
+    <h2 class="head">You edit data, not code</h2>
+    <p class="sub">Items, jobs, addresses, banks, shops and their prices, the blocks
+    a crew can hold, who buys stolen goods. All of it is one file &mdash; and
+    <strong>the whole file is checked before anything is built</strong>.</p>
+
+    <div class="two" style="margin-top: 30px">
+      <div>
+        <pre><span class="c">-- config.lua</span>
+<span class="k">shops</span> = {
+    {
+        name = <span class="s">"Rob's Liquor"</span>,
+        at   = <span class="s">"Rob's Liquor, Grove Street"</span>,
+        prices = {
+            water   = { buy = 250,  sell = 100 },
+            bandage = { buy = 1200, sell = 400 },
+            scrap   = { sell = 900 },  <span class="c">-- taken in, never sold</span>
+        },
+        restock = { water = 60 },
+        float = 50000,
+    },
+},</pre>
+        <p class="sub" style="margin-top:15px;font-size:14.5px">Money is whole cents
+        everywhere: <code>250</code> is $2.50. There is not one decimal in the file,
+        because a decimal in a price is the mistake that quietly costs you money.</p>
+      </div>
+      <div>
+        <pre class="refusal"><span class="bad">did not start: config.lua has 6 problems</span>
+
+ fences[1].at: <span class="s">"Cypress Flats Scrapyrd"</span> is not
+   the address of anything in `places`
+ items[2]: wieght is not an expected field
+ shops[1].prices.wtaer: names an item that
+   is not in `items`
+ turfz: is not a section. The sections are:
+   city, items, employers, places, banks,
+   shops, turfs, fences
+
+ <span class="bad">Nothing was built.</span> Fix these and restart.</pre>
+        <p class="sub" style="margin-top:15px;font-size:14.5px">Four typos, six
+        problems, <strong>one restart</strong>. A misspelled key is refused rather than
+        ignored &mdash; the worst config failure is the one where everything looks
+        right and the setting silently does nothing.</p>
+      </div>
+    </div>
+
+    <p class="sub" style="margin-top:26px">Adding to the config adds to the city.
+    Entries match by name, so a shop added and a server restarted is a new shop, and
+    everything already there keeps its stock, its till and its owner.
+    <strong>Restarting never reverts a city to its seed.</strong></p>
+
+    <div class="close">
+      <p><b>Your city, in an afternoon.</b> No Lua required to change a price, open a
+      shop, or draw a new block.</p>
+      <a class="buy" data-store href="#buy">Buy Now <span class="tagprice">$49</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= persistence ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">Persistence</span>
+    <h2 class="head">It will not lose your players&rsquo; work</h2>
+
+    <div class="two" style="margin-top: 26px">
+      <div class="scroll-x">
+        <table class="spec">
+          <tr><th>Out of the box</th><td><b>JSON inside the resource.</b> No database, no dependency, no setup. A corrupt file falls back to its backup and says so in the console.</td></tr>
+          <tr><th>One line later</th><td><b><code>set nyr_store database</code></b> &mdash; MySQL through the oxmysql you already run. One table, created on first boot. One thing to back up.</td></tr>
+          <tr><th>Speed</th><td>Each collection is read once at boot and served from memory after, so a player&rsquo;s request never waits on the database. Only rows that changed are written, batched 200 to a statement.</td></tr>
+          <tr><th>If it cannot be read</th><td><b>It refuses; it does not forget.</b> Corrupt files with an unreadable backup, or a database that has gone away: every request touching that collection is refused until it can be read again, and <b>nothing is written over it</b>. Same rule in both stores.</td></tr>
+          <tr><th>If MySQL is missing</th><td><b>It will not start</b>, and names what it looked for. It never quietly falls back to files.</td></tr>
+          <tr><th>Saving through it</th><td>A refusal is reported every save tick, in the console, for as long as it lasts. It never takes the save loop down &mdash; a city running with nothing writing it down is the one outcome worse than a refusal.</td></tr>
+        </table>
+      </div>
+      <div class="prose">
+        <p><strong style="color:var(--amber);font-weight:500">Why that rule is the whole
+        point.</strong> If unreadable looked like empty &mdash; a dead database, or a
+        corrupt file whose backup is also gone &mdash; the character system would find
+        nobody, make a fresh character over the top of somebody&rsquo;s, and the next
+        save would write it down over the last good copy.</p>
+        <p>A refused command is recoverable. A city overwritten with a blank one is
+        not. The failure mode is chosen, deliberately, to be the annoying one rather
+        than the unrecoverable one.</p>
+        <p>The same instinct runs through the money: every movement is a double-entry
+        posting and <strong>the total is always zero</strong>. Money cannot be created
+        or destroyed by accident, only moved &mdash; and one console command tells you
+        whether that is still true.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ tooling ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">For you, not for the players</span>
+    <h2 class="head">Admin and creator tooling, included</h2>
+    <p class="sub">Twelve console commands, three staff ranks, an audit trail, and a
+    live read of the running city that does not mean reading a log file.</p>
+
+    <div class="two" style="margin-top: 30px">
+      <div>
+        <pre><span class="lo">nyr</span> summary     the state of the city
+<span class="lo">nyr</span> verify      are the books still balanced
+<span class="lo">nyr</span> audit       what was asked, what came back
+<span class="lo">nyr</span> errors      everything that went wrong
+<span class="lo">nyr</span> notices     what it thought worth saying
+<span class="lo">nyr</span> store       where the city is kept, and
+            whether it is keeping up
+<span class="lo">nyr</span> save        write it down now
+<span class="lo">nyr</span> staff       grant moderator/admin/owner
+<span class="lo">nyr</span> commission  make somebody police
+<span class="lo">nyr</span> found       found a crew
+<span class="lo">nyr</span> wanted      who has heat, ranked
+<span class="lo">nyr</span> turf        who holds which block</pre>
+      </div>
+      <div>
+        <ul class="plain">
+          <li><b><code>nyr verify</code> is the one that matters.</b> It checks that the
+          ledger totals to zero, that every asset has exactly one owner, that the
+          inventory has duplicated nothing, and that the record is intact. One
+          command tells you whether your economy is still whole.</li>
+          <li><b>Admin power is granted from the console, never claimed.</b> Three
+          ranks, and capped: one command cannot create more than a set amount of
+          money or spawn more than a set number of items, whoever runs it.</li>
+          <li><b>Every admin action is in the audit trail</b> under the name that did
+          it, so &ldquo;who gave themselves a car&rdquo; has an answer.</li>
+          <li><b>A LAN dev bridge</b> &mdash; <code>/state</code>, <code>/log</code> and
+          <code>/do</code> over HTTP &mdash; lets you read and drive the running city
+          while you build it. Gated on <code>sv_lan</code>: a public server installs
+          none of it.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="close">
+      <p><b>Built to be run by one person.</b> The tools that keep a city honest ship
+      in the same folder as the city.</p>
+      <a class="buy" data-store href="#buy">Buy Now <span class="tagprice">$49</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ systems ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">What is in the folder</span>
+    <h2 class="head">Fifteen systems, sixty-eight commands</h2>
+    <p class="sub">Every one is a rule that lives on the server. The client asks; it
+    is never told anything it could act on by itself, and it is never even told
+    <em>why</em> it was refused.</p>
+
+    <div class="index" style="margin-top: 30px">
+      <div class="entry"><h3>Characters</h3><span class="n">5 commands</span><p>Three people to an account, one played at a time. Nobody left logged in across a restart.</p></div>
+      <div class="entry"><h3>The record</h3><span class="n">1 command</span><p>What happened &mdash; written whether or not anybody saw it, never edited, never expired.</p></div>
+      <div class="entry"><h3>Inventory</h3><span class="n">4 commands</span><p>Slots and grams. Reach is a grant the server issues and expires, not a claim a client makes.</p></div>
+      <div class="entry"><h3>Work</h3><span class="n">4 commands</span><p>A job board of who is hiring; a shift is started, finished or abandoned, and abandoning costs.</p></div>
+      <div class="entry"><h3>Property</h3><span class="n">5 commands</span><p>Addresses with doors, prices and rent. Rent falls due, arrears accrue, a place can be seized.</p></div>
+      <div class="entry"><h3>Vehicles</h3><span class="n">6 commands</span><p>One car, one owner. Keys change hands, boots hold things, and a hotwire is a crime with a record.</p></div>
+      <div class="entry"><h3>Police</h3><span class="n">4 commands</span><p>Commissioned from the console, never claimed. Arrest, look somebody up, seize what is illegal.</p></div>
+      <div class="entry"><h3>Banking</h3><span class="n">5 commands</span><p>Branches are places with doors. Deposits, withdrawals, transfers, and a statement you can read.</p></div>
+      <div class="entry"><h3>Shops</h3><span class="n">4 commands</span><p>A till with a float. A shop with no money cannot buy from you, and a robbery is its own command.</p></div>
+      <div class="entry"><h3>Fencing</h3><span class="n">3 commands</span><p>Somebody who asks no questions, pays less than a shop would, and chops cars.</p></div>
+      <div class="entry"><h3>Gangs</h3><span class="n">9 commands</span><p>Crews with ranks and a shared account, and blocks they can claim and hold.</p></div>
+      <div class="entry"><h3>Health</h3><span class="n">3 commands</span><p>Down, bleeding out, revived or respawned &mdash; and the server decides which, not the client.</p></div>
+      <div class="entry"><h3>Phone</h3><span class="n">5 commands</span><p>A number each. Messages between numbers, kept, and readable by police on a warrant path.</p></div>
+      <div class="entry"><h3>Admin</h3><span class="n">6 commands</span><p>Three ranks, granted from the console, capped, and every use in the audit trail.</p></div>
+      <div class="entry"><h3>Overview</h3><span class="n">4 commands</span><p>Who you are, what you carry, what is within reach, and where everything in the city is.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= memory ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">The mechanic it is named after</span>
+    <h2 class="head">A crime nobody saw leaves a full record and no heat</h2>
+    <div class="two" style="margin-top: 24px">
+      <div class="prose">
+        <p>The city keeps two things, deliberately apart.
+        <strong style="color:var(--amber);font-weight:500">The record</strong> is what
+        happened: written whether or not anybody saw it, never edited, never
+        expiring. A burglary with no witnesses still leaves a record, and that record
+        is what lets a detective find it later &mdash; instead of needing an eyewitness
+        who no longer plays on your server.</p>
+        <p><strong style="color:var(--amber);font-weight:500">Standing</strong> is what
+        the city currently thinks. It moves when things happen and drifts back toward
+        nothing when they stop. Heat cools.</p>
+      </div>
+      <div class="prose">
+        <p>The interesting part falls out of keeping them apart. Commit a crime with
+        no witnesses and you generate no heat and a complete record. Nobody is
+        looking for you. The evidence is sitting there with your name on it.</p>
+        <p>Wait out the heat and you are no longer hunted, and still the person who
+        did it. Somebody can find that out in a month and act on it.</p>
+        <p style="color:var(--dim)">Which records move which standing is a table, so a
+        new kind of crime is a line of configuration &mdash; not a new code path in
+        three systems.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================== gaps ===== -->
+
+<section>
+  <div class="wide">
+    <span class="tab">What you are not buying</span>
+    <h2 class="head">The gaps, said here rather than found later</h2>
+    <p class="sub">If one of these is a dealbreaker, better that you know before you
+    pay. Nothing on this page is worth a refund request.</p>
+    <div class="two" style="margin-top: 26px">
+      <ul class="plain gaps">
+        <li><b>No emergency services.</b> Health has downing, bleeding out and
+        revival. The EMS role, dispatch and a hospital as a place are not built.</li>
+        <li><b>No licences or courts.</b> A sentence is a fine.</li>
+        <li><b>No streamed assets.</b> No custom vehicles, clothing, MLOs or maps.
+        This is rules and screens; the map is Los Santos as it ships.</li>
+      </ul>
+      <ul class="plain gaps">
+        <li><b>No drag-and-drop inventory.</b> The grid is click, count, act.</li>
+        <li><b>No HUD overlay.</b> <code>me.status</code> answers with everything a HUD
+        needs; drawing one over the game is not included.</li>
+        <li><b>Not load-tested with hundreds of live players.</b> The persistence is
+        built for it and has not been proved at that scale. That claim is not made.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== buy ===== -->
+
+<section id="buy">
+  <div class="wide">
+    <h2 class="wordmark">NYR<span>Underworld</span></h2>
+    <p class="promise" style="margin-bottom:26px">The city remembers.</p>
+
+    <div class="pricing">
+      <span class="amount">$49</span>
+      <span class="terms"><b>One-time purchase</b>
+      the servers you administer &middot; updates for 0.1.x</span>
+    </div>
+
+    <div class="cta-row" style="margin-bottom:20px">
+      <a class="buy" data-store href="#top">Buy Now <span class="tagprice">$49</span></a>
+      <a class="buy-ghost" href="#demo">Watch the demo again <span>&uarr;</span></a>
+    </div>
+
+    <p class="reassure">Instant download &middot; readable source &middot; no escrow &middot;
+    no phone-home &middot; no subscription</p>
+
+    <div class="scroll-x" style="margin-top:36px; max-width: 780px">
+      <table class="spec">
+        <tr><th>You receive</th><td><b>One folder.</b> 54 files of readable Lua, eight in-game screens, 68 commands, <code>config.lua</code>, the MySQL layer, the licence, and <code>audit-accepted.json</code>.</td></tr>
+        <tr><th>Interface</th><td>Eight screens: characters, pockets, phone, shop counter, stash, around you, bank counter, job board &mdash; found from map blips, markers and press-E prompts. <b>Gangs, police, fencing and vehicles are documented chat commands.</b> Say so to your players.</td></tr>
+        <tr><th>Not included</th><td>Hosting, a GTA&nbsp;V copy, custom maps, vehicles, clothing or streamed audio. The key art on this page is promotional illustration.</td></tr>
+        <tr><th>Support</th><td>A monitored channel with a 72-hour first response, for installation and defects in the documented configuration. Custom integration is a separate scope.</td></tr>
+        <tr><th>Install</th><td>Copy in as <code>nyr_underworld</code>, in lower case, one <code>ensure</code> line, start. On the Enhanced server a folder with a capital letter cannot save, so the resource refuses to start rather than lose the city.</td></tr>
+        <tr><th>Requires</th><td>A FiveM server with a licence key, and OneSync on. Optional: oxmysql or mysql-async.</td></tr>
+        <tr><th>Licence</th><td>Use on the servers you administer, and modify the source freely; no cap on players, uptime or revenue. Redistribution or resale is not permitted.</td></tr>
+        <tr><th>Updates</th><td>Included for 0.1.x, delivered the same way you bought it.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="wide">
+    <b>The city remembers.</b>
+    <span class="fig">15 systems &middot; 68 commands &middot; 980 tests &middot; 0 dependencies &middot; $49</span>
+  </div>
+  <div class="wide legal">
+    <p>NYR Underworld is an independent FiveM resource. It is <strong>not affiliated
+    with, approved, sponsored or endorsed by</strong> Rockstar Games, Cfx.re or
+    Take-Two Interactive. GTA&nbsp;V and FiveM are the property of their respective
+    owners, and neither a copy of the game nor server hosting is included in this
+    purchase.</p>
+    <p>Purchases are processed by the seller&rsquo;s checkout under the terms shown
+    there. The licence that ships in the download is the one that governs use; read
+    it before buying. The key art on this page is promotional illustration, and the
+    interface screens are the resource&rsquo;s own code drawn with data built by its
+    own systems &mdash; neither is in-game footage.</p>
+  </div>
+</footer>
+
+<script id="nyr-css" type="text/plain">__NYR_CSS__</script>
+<script id="nyr-screens" type="text/plain">__NYR_SCREENS__</script>
+<script>
+(function () {
+  // ---------------------------------------------------------------- the store
+  // One line. Every Buy Now on the page reads from it, so pointing the page at a
+  // real checkout means changing this string and nothing else. Until it is set
+  // the buttons scroll to the buy section rather than pretending to be a
+  // checkout that is not there.
+  var STORE_URL = "https://REPLACE-WITH-STORE-URL";
+
+  if (STORE_URL.indexOf("REPLACE-WITH") === -1) {
+    var buttons = document.querySelectorAll('[data-store]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].href = STORE_URL;
+      buttons[i].target = "_blank";
+      buttons[i].rel = "noopener";
+    }
+  }
+
+  // --------------------------------------------------------------- the screens
+  //
+  // Each frame holds the interface of the resource itself: its real markup,
+  // drawn once out of its real app.js against a city that was actually played,
+  // and its real stylesheet. Both are carried here and composed by this script,
+  // so the frame runs nothing of its own. A frame that needs a script to show
+  // anything is a frame that shows a black rectangle wherever scripts do not
+  // run, and that is too much of this page to leave to chance.
+  function decode(id) {
+    return new TextDecoder().decode(
+      Uint8Array.from(atob(document.getElementById(id).textContent.trim()),
+                      function (c) { return c.charCodeAt(0); }));
+  }
+  var CSS = decode('nyr-css');
+  var SCREENS = JSON.parse(decode('nyr-screens'));
+
+  function page(name) {
+    return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>'
+      + CSS + '</style></head><body>' + (SCREENS[name] || '') + '</body></html>';
+  }
+
+  // The screens are already in the page. This only makes them crisp: the
+  // interface rendered at the 1280 a player plays at, scaled down to the frame.
+  function fit(frame) {
+    var iframe = frame.querySelector('iframe');
+    if (!iframe) return;
+    frame.classList.add('crisp');
+    iframe.style.transform = 'scale(' + (frame.clientWidth / 1280) + ')';
+  }
+
+  function paint(frame, name) {
+    var iframe = frame.querySelector('iframe');
+    if (!iframe) return;
+    iframe.srcdoc = page(name);
+    fit(frame);
+  }
+
+  var frames = Array.prototype.slice.call(document.querySelectorAll('.screen-frame'));
+  frames.forEach(fit);
+
+  var resizing;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizing);
+    resizing = setTimeout(function () { frames.forEach(fit); }, 80);
+  });
+
+  // ------------------------------------------------------------------ the stage
+  // The hero panel walks the screens, because a still frame of an interface is
+  // not obviously a demo and a moving one is.
+  var TOUR = [
+    ['picker',  'Two people on one account.',
+                'Vic has $2,180.50 and a flat. Rosa has $812.20 and does not.'],
+    ['nearby',  'What is close enough to walk up to.',
+                'Decided from where the ped actually is, server-side, never asked of the client.'],
+    ['shop',    'A counter with a till.',
+                'Scrap has no buy price and no stock: this shop takes it in and never sells it.'],
+    ['pockets', 'Seven slots, 25.7kg of 40.',
+                'Slots and weight both count, and the bar is drawn from numbers the server sent.'],
+    ['stash',   'His flat on Integrity Way.',
+                'Bought through the ledger. What he put down is still there after a restart.'],
+    ['phone',   'Numbers, not names.',
+                'The city keeps what was said, which is why the police have a way to read it.'],
+    ['bank',    'A counter at Pillbox Hill.',
+                'Every figure is the ledger\'s, formatted by the server. The page does no arithmetic.'],
+    ['jobs',    'Who is hiring, and for what.',
+                'What a shift pays and how long until you may take it again, before you take it.']
+  ];
+
+  var stage = document.getElementById('stage-frame');
+  var say = document.getElementById('stage-say');
+  var dots = document.getElementById('dots');
+  var at = 0, timer = null;
+
+  TOUR.forEach(function (row, index) {
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', row[1]);
+    dot.addEventListener('click', function () { show(index); hold(); });
+    dots.appendChild(dot);
+  });
+
+  function show(index) {
+    at = (index + TOUR.length) % TOUR.length;
+    var row = TOUR[at];
+    paint(stage, row[0]);
+    say.innerHTML = '<b>' + row[1] + '</b> ' + row[2];
+    var buttons = dots.children;
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute('aria-current', i === at ? 'true' : 'false');
+    }
+  }
+
+  function hold() {
+    clearInterval(timer);
+    timer = setInterval(function () { show(at + 1); }, 4200);
+  }
+
+  show(0);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) hold();
+
+  // ------------------------------------------------------------------ the rail
+  // The commercial path stays reachable once the hero has gone, without a banner
+  // sitting on top of the first thing anybody reads.
+  var rail = document.getElementById('rail');
+  var hero = document.getElementById('top');
+  function railCheck() {
+    rail.classList.toggle('up', hero.getBoundingClientRect().bottom < 0);
+  }
+  railCheck();
+  window.addEventListener('scroll', railCheck, { passive: true });
+})();
+</script>

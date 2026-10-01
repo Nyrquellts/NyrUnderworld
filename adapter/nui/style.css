@@ -1,0 +1,808 @@
+/*
+  Every screen a player sees.
+
+  Dark, because the city is. Warm, because the alternative is a spreadsheet.
+  No web fonts and no images: a NUI page loads off the player's own disk with
+  no network behind it, so everything here is a system font, a gradient, and the
+  inline SVG pictograms in index.html.
+
+  The screens used to cover the whole game with a near-black sheet each, so
+  opening the pockets took the city away. Only the character picker does that
+  now. Everything else is a panel with a firm edge and a shadow, opaque enough to
+  read over a bright street at noon, and the game stays in view around it.
+*/
+
+:root {
+  --ink: #f1eadf;
+  --ink-dim: #bdb1a3;
+  --ink-faint: #93897d;
+  --ground: #0b0a09;
+  --panel: rgba(21, 19, 17, 0.965);
+  --panel-head: rgba(30, 27, 24, 0.97);
+  --raised: rgba(241, 234, 223, 0.045);
+  --edge: rgba(241, 234, 223, 0.10);
+  --edge-firm: rgba(241, 234, 223, 0.22);
+  --amber: #e0a24a;
+  --amber-ink: #1b1309;
+  --amber-dim: rgba(224, 162, 74, 0.15);
+  --amber-edge: rgba(224, 162, 74, 0.55);
+  --bad: #e5775a;
+  --bad-dim: rgba(229, 119, 90, 0.13);
+  --good: #9fce9f;
+  --good-dim: rgba(159, 206, 159, 0.12);
+  --radius: 10px;
+  --radius-small: 6px;
+  --shadow: 0 28px 70px rgba(0, 0, 0, 0.55), 0 3px 10px rgba(0, 0, 0, 0.4);
+  --gutter: 22px;
+  --mono: "Cascadia Mono", Consolas, "DejaVu Sans Mono", ui-monospace, monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  /* The game is behind this page. Anything not drawn is the city. */
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}
+
+[hidden] { display: none !important; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ========================================================= the two shells
+
+   A screen is a `<main>`. spec/nui_spec.lua holds every one of them to being
+   placed and painted by a rule here -- a screen without one draws as bare text
+   over the game -- and every one but the picker to a size that leaves the
+   city in view. */
+
+/* The picker comes before there is anything to look at, so it is the one
+   screen that covers the game. */
+#picker {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 6vh 6vw;
+  background:
+    radial-gradient(120% 90% at 18% 0%, rgba(224, 162, 74, 0.10), transparent 55%),
+    linear-gradient(180deg, rgba(11, 10, 9, 0.97), rgba(11, 10, 9, 0.99));
+  animation: rise 240ms ease-out;
+}
+
+/* Everything else floats in the middle, sized to what it holds. */
+.panel {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(1100px, 92vw);
+  height: -webkit-fit-content;
+  height: fit-content;
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--edge-firm);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: rise 200ms ease-out;
+}
+
+/* Sized to what each holds, so a short list is not a wide empty sheet. */
+#pockets { width: min(900px, 92vw); }
+#shop { width: min(960px, 92vw); }
+#nearby, #bank, #jobs { width: min(840px, 92vw); }
+
+/* The phone is a phone, held at the right-hand edge. */
+.device {
+  position: absolute;
+  inset: 0 4vw 0 auto;
+  margin: auto 0;
+  width: min(420px, 92vw);
+  height: min(780px, 88vh);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--edge-firm);
+  border-radius: 28px;
+  box-shadow: var(--shadow), inset 0 0 0 5px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  animation: rise 200ms ease-out;
+}
+
+/* ================================================================ the head */
+
+.screen-head {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px var(--gutter) 14px;
+  background: var(--panel-head);
+  border-bottom: 1px solid var(--edge-firm);
+}
+
+.device .screen-head { padding: 22px 20px 14px; }
+
+.titles { display: flex; align-items: baseline; gap: 14px; min-width: 0; flex-wrap: wrap; }
+
+.screen-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+}
+
+.screen-note {
+  font-size: 13px;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip {
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(229, 119, 90, 0.55);
+  background: var(--bad-dim);
+  color: var(--bad);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.chip:empty { display: none; }
+
+/* Close, always at the top right, with the key that does the same. */
+.close-button {
+  margin-left: auto;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px 7px 12px;
+  min-height: 32px;
+  color: var(--ink-dim);
+  background: transparent;
+}
+
+.close-button:hover { color: var(--ink); }
+
+kbd {
+  display: inline-block;
+  padding: 3px 6px 2px;
+  border: 1px solid var(--edge-firm);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: rgba(241, 234, 223, 0.06);
+  color: var(--ink-dim);
+  font: 600 10px/1 var(--sans);
+  letter-spacing: 0.06em;
+  text-transform: none;
+}
+
+/* The server is being asked. Nothing is decided here -- the buttons are only
+   stopped from being pressed twice while the first press is answered -- and a
+   thin line runs under the title so the wait is something a player can see.
+   Close is left alone: leaving mid-question is safe, because an answer that
+   lands after the page has closed is dropped (app.js, `generation`). */
+main.waiting button:not(.close-button),
+main.waiting input { opacity: 0.45; pointer-events: none; }
+
+main.waiting .screen-head::after,
+#picker.waiting .picker-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 28%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  animation: asking 1100ms ease-in-out infinite;
+}
+
+@keyframes asking {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(360%); }
+}
+
+/* ================================================================ the body */
+
+.screen-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px var(--gutter) 16px;
+}
+
+.screen-body::-webkit-scrollbar,
+#threads::-webkit-scrollbar,
+#messages::-webkit-scrollbar { width: 8px; }
+.screen-body::-webkit-scrollbar-thumb,
+#threads::-webkit-scrollbar-thumb,
+#messages::-webkit-scrollbar-thumb { background: var(--edge-firm); border-radius: 4px; }
+
+h2 {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.count {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ================================================================= money
+
+   One style for every amount on every screen: the same face, figures of one
+   width, right-aligned in a column of its own. A price, a wallet, a balance and
+   a wage used to be four different fonts in three colours. */
+.money {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: 0.01em;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.place.out .money { color: var(--bad); }
+
+/* ================================================================== rows
+
+   A person, a door, a bank line and a job are one shape: what it is with a line
+   under it, the money in its column, and what can be pressed in the last
+   column, which is the same width on every row. */
+.rows { list-style: none; margin: 0; padding: 0; }
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 8.5rem 12.5rem;
+  align-items: center;
+  column-gap: 18px;
+  min-height: 60px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--edge);
+  transition: background 120ms ease;
+}
+
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--raised); }
+.row.no-acts { grid-template-columns: minmax(0, 1fr) 8.5rem; }
+
+.row-main { grid-column: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.row > .money { grid-column: 2; }
+.row-acts { grid-column: 3; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+
+.place-what {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.place-where { font-size: 12.5px; color: var(--ink-dim); letter-spacing: 0.02em; }
+.place-where:empty { display: none; }
+
+.place.shut .place-what { color: var(--ink-faint); }
+.place.shut .place-where { color: var(--bad); }
+.place.shut .job-take { opacity: 0.55; }
+
+/* =============================================================== buttons */
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 8px 15px;
+  border: 1px solid var(--edge-firm);
+  border-radius: var(--radius-small);
+  background: rgba(241, 234, 223, 0.03);
+  color: var(--ink);
+  font: 600 12px/1 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease, opacity 120ms ease;
+}
+
+button:hover { background: rgba(241, 234, 223, 0.08); }
+
+/* What a row or a strip offers. */
+button.primary { border-color: var(--amber-edge); color: var(--amber); }
+button.primary:hover { background: var(--amber-dim); }
+
+/* The one thing a form is for. */
+button.cta { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); }
+button.cta:hover { background: #eab15f; border-color: #eab15f; }
+
+button.quiet { border-color: transparent; background: transparent; color: var(--ink-dim); }
+button.quiet:hover { color: var(--ink); background: rgba(241, 234, 223, 0.06); }
+
+button:focus-visible, .slot:focus-visible, .thread:focus-visible, input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* Asked once, and waiting to be asked again. The line under it runs out in the
+   time the question stays asked -- app.js sets --confirm-for from the same
+   number that takes the question back -- so a player can see it will not wait
+   forever. */
+button.confirming {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--bad);
+  background: var(--bad-dim);
+  color: var(--bad);
+}
+
+button.confirming::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: currentColor;
+  transform-origin: left center;
+  animation: runs-out var(--confirm-for, 3000ms) linear forwards;
+}
+
+@keyframes runs-out {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ================================================================ inputs */
+
+input[type="text"], input[type="number"] {
+  min-width: 0;
+  min-height: 36px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--edge-firm);
+  border-radius: var(--radius-small);
+  color: var(--ink);
+  font: 15px var(--sans);
+  user-select: text;
+  cursor: text;
+  outline: none;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+input[type="text"]::placeholder, input[type="number"]::placeholder { color: var(--ink-faint); }
+input[type="text"]:focus, input[type="number"]:focus { border-color: var(--amber-edge); background: rgba(0, 0, 0, 0.45); }
+
+/* ======================================================= the line that says */
+
+.message {
+  flex: none;
+  position: relative;
+  margin: 0 var(--gutter) 16px;
+  padding: 10px 14px 10px 40px;
+  border: 1px solid rgba(229, 119, 90, 0.45);
+  border-radius: var(--radius-small);
+  background: var(--bad-dim);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.4;
+  animation: rise 160ms ease-out;
+}
+
+.message::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%23e5775a' stroke-width='1.6'/%3E%3Cpath d='M8 4.2v4.6' stroke='%23e5775a' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='8' cy='11.4' r='1.1' fill='%23e5775a'/%3E%3C/svg%3E");
+}
+
+.message.good { border-color: rgba(159, 206, 159, 0.42); background: var(--good-dim); }
+
+.message.good::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%239fce9f' stroke-width='1.6'/%3E%3Cpath d='M4.8 8.3l2.2 2.2 4.2-4.4' fill='none' stroke='%239fce9f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ========================================================== nothing there */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 16px 34px;
+  color: var(--ink-dim);
+  text-align: center;
+}
+
+.empty p { margin: 0; font-family: var(--serif); font-size: 16px; font-style: italic; }
+.empty-icon { width: 46px; height: 46px; fill: none; stroke: var(--ink-faint); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.empty.small { padding: 18px 8px; gap: 8px; }
+.empty.small p { font-size: 14px; }
+.empty.small .empty-icon { width: 30px; height: 30px; }
+
+.empty-line { margin: 18px 0 0; color: var(--ink-dim); font-family: var(--serif); font-style: italic; text-align: center; }
+/* An empty conversation says so in the middle of where it would be. */
+#messages:empty { flex: 0 0 auto; }
+.conversation .empty-line { margin: auto 0; }
+
+/* ==================================================== acting on the picked */
+
+.act {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  padding: 12px var(--gutter);
+  border-top: 1px solid var(--edge-firm);
+  background: linear-gradient(0deg, var(--amber-dim), rgba(224, 162, 74, 0.08));
+}
+
+.act h2 {
+  flex: 1 1 12rem;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.act form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.act input[type="text"] { width: 72px; text-align: center; font-variant-numeric: tabular-nums; }
+
+/* A strip under the head: the balance and the counter at a bank, the shift
+   being worked on the job board. */
+.strip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 14px var(--gutter);
+  border-bottom: 1px solid var(--edge-firm);
+  background: var(--raised);
+}
+
+.strip-label { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+.strip-text { flex: 1 1 auto; font-family: var(--serif); font-size: 17px; }
+.strip-acts { display: flex; gap: 8px; margin-left: auto; }
+
+/* ================================================================ picker */
+
+.picker-inner {
+  width: min(880px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.picker-head { position: relative; display: flex; align-items: flex-start; gap: 16px; padding-bottom: 6px; }
+
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(30px, 4.2vw, 56px);
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  line-height: 1;
+}
+
+h1 span {
+  display: block;
+  color: var(--amber);
+  font-size: 0.46em;
+  letter-spacing: 0.42em;
+  margin-top: 0.5em;
+}
+
+.promise { margin: 16px 0 0; color: var(--ink-dim); font-size: 13px; font-style: italic; letter-spacing: 0.06em; }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--edge-firm);
+}
+
+.people { display: flex; flex-direction: column; min-height: 0; }
+
+.person { grid-template-columns: minmax(0, 1fr) 8.5rem 12.5rem; min-height: 66px; }
+.person.playing { background: var(--amber-dim); box-shadow: inset 3px 0 0 var(--amber); }
+
+.who { gap: 5px; }
+
+.name {
+  font-family: var(--serif);
+  font-size: 21px;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bad);
+}
+
+.note:empty { display: none; }
+
+#new-person { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+#new-person input { flex: 1 1 190px; }
+
+#picker .message { margin: 0; }
+
+/* =============================================================== pockets */
+
+.load { display: flex; align-items: center; gap: 12px; min-width: 260px; margin-left: auto; }
+.load .count { white-space: nowrap; }
+.load + .close-button { margin-left: 6px; }
+
+.bar {
+  flex: 1 1 110px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(241, 234, 223, 0.12);
+  overflow: hidden;
+}
+
+/* A proportion drawn, never a rule. Whether one more thing fits is answered
+   by the server refusing to put it there. */
+.bar i { display: block; height: 100%; width: 0; background: var(--amber); transition: width 200ms ease; }
+.bar i.heavy { background: var(--bad); }
+
+.grid {
+  list-style: none;
+  margin: 12px 0 4px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+
+.slot {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 11px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--raised);
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.slot:hover { border-color: var(--amber-edge); background: rgba(224, 162, 74, 0.08); }
+.slot.picked { border-color: var(--amber); background: var(--amber-dim); box-shadow: inset 0 0 0 1px var(--amber); }
+
+.slot-label {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.slot-stack {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--amber);
+  font: 600 12px/1.2 var(--sans);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.slot-stack:empty { display: none; }
+
+.icon-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
+.item-icon { width: 26px; height: 26px; flex: none; fill: none; stroke: #cdb083; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.slot-icon { position: absolute; width: 46px; height: 46px; top: 16px; left: calc(50% - 23px); }
+.grid.small { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.grid.small .slot { padding: 8px; }
+.grid.small .slot-label { font-size: 13px; }
+.grid.small .slot-icon { width: 34px; height: 34px; top: 12px; left: calc(50% - 17px); }
+
+/* ============================================================= the phone */
+
+.phone-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+
+.threads, .conversation { display: flex; flex-direction: column; min-height: 0; padding: 12px 16px; gap: 10px; }
+.threads { flex: 0 0 auto; max-height: 40%; border-bottom: 1px solid var(--edge-firm); }
+.conversation { flex: 1 1 auto; }
+
+.threads h2, .conversation h2 { padding-bottom: 8px; border-bottom: 1px solid var(--edge); }
+.conversation h2 { font-size: 13px; letter-spacing: 0.06em; color: var(--amber); font-variant-numeric: tabular-nums; }
+
+#threads, #messages { flex: 1 1 auto; min-height: 0; overflow-y: auto; list-style: none; margin: 0; padding: 0; }
+
+.thread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.thread:hover { background: var(--raised); }
+.thread.picked { background: var(--amber-dim); }
+.thread-number { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.thread-when { font-size: 11px; color: var(--ink-faint); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.thread-last { grid-column: 1 / -1; font-size: 13px; color: var(--ink-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread.outgoing .thread-last::before { content: "you: "; color: var(--ink-faint); }
+
+/* A message, on the side of the person who said it. */
+.msg {
+  max-width: 82%;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 14px 14px 14px 4px;
+  background: rgba(241, 234, 223, 0.08);
+}
+
+.msg.mine {
+  margin-left: auto;
+  border-radius: 14px 14px 4px 14px;
+  background: rgba(224, 162, 74, 0.22);
+  text-align: right;
+}
+
+.msg-body { display: block; font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.msg-when { display: block; margin-top: 3px; font-size: 10px; letter-spacing: 0.06em; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+#phone-new, #phone-send { display: flex; gap: 8px; flex: none; }
+#phone-new input, #phone-send input { flex: 1 1 auto; }
+#phone-to { font-variant-numeric: tabular-nums; }
+.device .message { margin: 0 16px 16px; }
+
+/* ============================================================ the counter */
+
+.prices { width: 100%; border-collapse: collapse; }
+
+.prices th, .prices td { padding: 0 12px; border-bottom: 1px solid var(--edge); white-space: nowrap; }
+
+.prices thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 40px;
+  background: #1b1815;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  border-bottom-color: var(--edge-firm);
+}
+
+.prices td { height: 60px; }
+.prices .num { text-align: right; width: 8.5rem; }
+.prices .act-col { text-align: right; width: 8rem; }
+.price-stock { font-variant-numeric: tabular-nums; color: var(--ink-dim); }
+.price-item { display: flex; gap: 14px; align-items: center; }
+.price-label { font-family: var(--serif); font-size: 17px; white-space: normal; }
+.price:hover td { background: var(--raised); }
+.price.picked td { background: var(--amber-dim); }
+.price.bare .price-stock { color: var(--bad); font-weight: 600; }
+.prices tbody tr:last-child td { border-bottom: none; }
+
+/* ============================================================= both sides */
+
+.two-ways {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px 14px;
+  gap: 4px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--raised);
+}
+
+.side h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.side .grid { margin-top: 10px; }
+
+/* =================================================================== bank */
+
+.balance { display: flex; flex-direction: column; gap: 4px; margin-right: auto; }
+.bank-balance { font-size: 30px; text-align: left; color: var(--ink); }
+/* No account, no balance: the label goes with the figure rather than sitting
+   over nothing. */
+.balance .strip-label { display: none; }
+.bank-balance:not(:empty)::before {
+  content: "Balance";
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.bank-counter { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.bank-counter .field { display: flex; flex-direction: column; gap: 5px; }
+.bank-counter .field span { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+.bank-counter .field input { width: 11rem; font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 760px) {
+  .row, .person { grid-template-columns: minmax(0, 1fr) 7rem; row-gap: 8px; }
+  .row-acts { grid-column: 1 / -1; justify-content: flex-start; }
+  .load { min-width: 0; }
+}
